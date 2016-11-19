@@ -1,6 +1,5 @@
 package dzq.group.mark.controller;
 
-import dzq.group.mark.domain.GroupDomain;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +15,8 @@ public class GroupController {
 
     @RequestMapping(value = "/create", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
-    public String create(GroupDomain groupDomain) {
-        logger.info("GroupController create:" + groupDomain.toString());
+    public String create(@RequestParam String nickName) {
+        logger.info("GroupController create:" + nickName);
 
         System.out.println("121");
         return "{name:123}";
