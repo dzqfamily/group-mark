@@ -1,6 +1,8 @@
 package dzq.group.mark.controller;
 
 import dzq.group.mark.domain.RegisterUser;
+import dzq.group.mark.entity.GmUser;
+import dzq.group.mark.service.UserService;
 import dzq.group.mark.vaild.RegisterUserValid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
     @Autowired
     private RegisterUserValid registerUserValid;
+    @Autowired
+    private UserService userService;
 
     public static final Logger logger = Logger.getLogger(UserController.class);
 
@@ -32,9 +36,15 @@ public class UserController {
     @ResponseBody
     public String register(RegisterUser registerUser) {
 
-        registerUserValid.vaild(registerUser);
-
+        GmUser gmUser = createGmUser(registerUser);
         return "";
+    }
+
+    private GmUser createGmUser(RegisterUser registerUser) {
+        GmUser gmUser = new GmUser();
+        gmUser.setMobilePhone(registerUser.getMobilePhone());
+        gmUser.setNickName(registerUser.getNickName());
+        return null;
     }
 
     @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
