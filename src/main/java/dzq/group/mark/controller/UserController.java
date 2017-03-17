@@ -3,6 +3,7 @@ package dzq.group.mark.controller;
 import dzq.group.mark.domain.RegisterUser;
 import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.service.UserService;
+import dzq.group.mark.utils.MD5Encrypt;
 import dzq.group.mark.vaild.RegisterUserValid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +36,19 @@ public class UserController {
     @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public String register(RegisterUser registerUser) {
+        logger.info(registerUser + "start regist");
 
         GmUser gmUser = createGmUser(registerUser);
-        return "";
+
+        return userService.regist(gmUser);
     }
 
     private GmUser createGmUser(RegisterUser registerUser) {
         GmUser gmUser = new GmUser();
         gmUser.setMobilePhone(registerUser.getMobilePhone());
         gmUser.setNickName(registerUser.getNickName());
-        return null;
+        gmUser.setPassword(MD5Encrypt.encode(registerUser.getPassword()));
+        return gmUser;
     }
 
     @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)

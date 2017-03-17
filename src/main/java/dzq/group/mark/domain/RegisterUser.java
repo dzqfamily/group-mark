@@ -32,4 +32,12 @@ public class RegisterUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "RegisterUser{" +
+				"mobilePhone='" + mobilePhone + '\'' +
+				", nickName='" + nickName + '\'' +
+				'}';
+	}
 }

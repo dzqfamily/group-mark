@@ -1,5 +1,8 @@
 package dzq.group.mark.service;
 
+import dzq.group.mark.entity.GmUser;
+import dzq.group.mark.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,7 +10,11 @@ import org.springframework.stereotype.Service;
  */
 @Service("userService")
 public class UserService {
+	@Autowired
+	private UserMapper userMapper;
 
-
+	public String regist(GmUser gmUser) {
+		return userMapper.insert(gmUser);
+	}
 
 }
