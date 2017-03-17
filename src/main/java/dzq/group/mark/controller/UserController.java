@@ -3,6 +3,7 @@ package dzq.group.mark.controller;
 import dzq.group.mark.domain.RegisterUser;
 import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.service.UserService;
+import dzq.group.mark.utils.IdGenerator;
 import dzq.group.mark.utils.MD5Encrypt;
 import dzq.group.mark.vaild.RegisterUserValid;
 import org.apache.log4j.Logger;
@@ -45,9 +46,11 @@ public class UserController {
 
     private GmUser createGmUser(RegisterUser registerUser) {
         GmUser gmUser = new GmUser();
+        gmUser.setUserId(IdGenerator.getId());
         gmUser.setMobilePhone(registerUser.getMobilePhone());
         gmUser.setNickName(registerUser.getNickName());
         gmUser.setPassword(MD5Encrypt.encode(registerUser.getPassword()));
+        gmUser.setUserType("1");
         return gmUser;
     }
 
