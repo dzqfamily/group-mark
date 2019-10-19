@@ -1,71 +1,93 @@
 package dzq.group.mark.entity;
+
+import dzq.group.mark.utils.MD5Encrypt;
+
 import java.util.Date;
-/**
- * Created by duanzhiqiang1 on 2016/11/21.
- */
+
 public class GmUser {
+    private Long id;
 
-	private String userId;
-	private String mobilePhone;
-	private String password;
-	private String nickName;
-	private String userType;
-	private Date creDate;
-	private Date modDate;
+    private String openid;
 
-	public String getUserId() {
-		return userId;
-	}
+    private String sessionKey;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    private String nickName;
 
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
+    private String token;
 
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
+    private Date accessDate;
 
-	public String getPassword() {
-		return password;
-	}
+    private Date createdDate;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    private Date modifiedDate;
 
-	public String getNickName() {
-		return nickName;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getUserType() {
-		return userType;
-	}
+    public String getOpenid() {
+        return openid;
+    }
 
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
-	public Date getCreDate() {
-		return creDate;
-	}
+    public String getSessionKey() {
+        return sessionKey;
+    }
 
-	public void setCreDate(Date creDate) {
-		this.creDate = creDate;
-	}
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
 
-	public Date getModDate() {
-		return modDate;
-	}
+    public String getNickName() {
+        return nickName;
+    }
 
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Date getAccessDate() {
+        return accessDate;
+    }
+
+    public void setAccessDate(Date accessDate) {
+        this.accessDate = accessDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public void md5() {
+
+        this.token = MD5Encrypt.encode(this.openid + this.sessionKey);
+
+    }
 }
