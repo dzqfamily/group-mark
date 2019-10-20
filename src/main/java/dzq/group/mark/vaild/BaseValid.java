@@ -5,6 +5,6 @@ package dzq.group.mark.vaild;
  */
 public class BaseValid {
 
-
+    
 
 }
