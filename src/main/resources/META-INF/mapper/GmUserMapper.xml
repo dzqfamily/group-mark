@@ -6,14 +6,12 @@
     <result column="openid" property="openid" jdbcType="VARCHAR" />
     <result column="session_key" property="sessionKey" jdbcType="VARCHAR" />
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
-    <result column="token" property="token" jdbcType="VARCHAR" />
-    <result column="access_date" property="accessDate" jdbcType="TIMESTAMP" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, openid, session_key, nick_name, token, access_date, created_date, modified_date
+    id, openid, session_key, nick_name, created_date, modified_date
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -25,10 +23,10 @@
 
   <insert id="insert" parameterType="dzq.group.mark.entity.GmUser" >
     insert into gm_user (openid, session_key,
-      nick_name, token, access_date, 
+      nick_name,
       created_date, modified_date)
     values (#{openid,jdbcType=VARCHAR}, #{sessionKey,jdbcType=VARCHAR},
-      #{nickName,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, now(),
+      #{nickName,jdbcType=VARCHAR},
       now(), now())
   </insert>
   <select id="getUserByOpenid" resultMap="BaseResultMap">
@@ -36,7 +34,4 @@
     <include refid="Base_Column_List" />
     from gm_user where openid = #{openid,jdbcType=VARCHAR}
   </select>
-  <update id="updateAccessDate" parameterType="dzq.group.mark.entity.GmUser">
-    update gm_user set access_date = now() where id = #{id,jdbcType=BIGINT}
-  </update>
 </mapper>

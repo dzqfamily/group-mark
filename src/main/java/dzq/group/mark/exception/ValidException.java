@@ -1,5 +1,7 @@
 package dzq.group.mark.exception;
 
+import dzq.group.mark.common.ValidExCode;
+
 /**
  * Created by duanzhiqiang1 on 2016/11/21.
  */
@@ -24,8 +26,11 @@ public class ValidException extends Exception {
 		this.msg = msg;
 	}
 
-	public ValidException(String code, String msg) {
+	public ValidException(String code, String... msg) {
 		this.code = code;
-		this.msg = msg;
+		this.msg = ValidExCode.getMsgByCode(code);
+		if (msg != null && msg.length != 0) {
+			this.msg = String.format(this.msg, msg);
+		}
 	}
 }

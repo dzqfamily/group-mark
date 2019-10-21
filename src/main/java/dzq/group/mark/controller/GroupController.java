@@ -2,9 +2,12 @@ package dzq.group.mark.controller;
 
 import com.alibaba.fastjson.JSON;
 import dzq.group.mark.domain.CreateGroupRequest;
+import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.exception.ValidException;
+import dzq.group.mark.service.GmUserService;
 import dzq.group.mark.vaild.CreateGroupValid;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,23 +22,33 @@ import java.util.Map;
 public class GroupController {
 
     public static final Logger logger = Logger.getLogger(GroupController.class);
+    @Autowired
+    private CreateGroupValid createGroupValid;
+    @Autowired
+    private GmUserService gmUserService;
 
-//    @RequestMapping(value = "/create", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String create(CreateGroupRequest createGroupRequest) {
-//        Map<String, String> result = new HashMap<>();
-//        try {
-//            CreateGroupValid.vaild(createGroupRequest);
-//        } catch (ValidException e) {
-//            result.put("code", e.getCode());
-//            result.put("msg", e.getMsg());
-//            return JSON.toJSONString(result);
-//        }
-//        logger.info("GroupController create:" + nickName);
-//
-//        System.out.println("121");
-//        return "{name:123}";
-//    }
+    @RequestMapping(value = "/create", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String create(CreateGroupRequest createGroupRequest) {
+
+        logger.info(createGroupRequest);
+
+        Map<String, String> result = new HashMap<>();
+        try {
+            createGroupValid.vaild(createGroupRequest);
+            GmUser gmUser = gmUserService.getUserByToken(createGroupRequest.getToken());
+
+
+        } catch (ValidException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
+        }
+
+
+        System.out.println("121");
+        return "{name:123}";
+    }
 //
 //    /**
 //     * 查找团员

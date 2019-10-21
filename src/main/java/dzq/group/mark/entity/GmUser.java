@@ -13,8 +13,6 @@ public class GmUser {
 
     private String nickName;
 
-    private String token;
-
     private Date accessDate;
 
     private Date createdDate;
@@ -53,14 +51,6 @@ public class GmUser {
         this.nickName = nickName;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public Date getAccessDate() {
         return accessDate;
     }
@@ -85,9 +75,4 @@ public class GmUser {
         this.modifiedDate = modifiedDate;
     }
 
-    public void md5() {
-
-        this.token = MD5Encrypt.encode(this.openid + this.sessionKey);
-
-    }
 }

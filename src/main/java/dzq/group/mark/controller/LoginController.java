@@ -54,18 +54,15 @@ public class LoginController {
         if (!StringUtils.isEmpty(code2Session)) {
             Map<String, String> userInfo = JSON.parseObject(code2Session, Map.class);
             GmUser gmUser = gmUserService.getUserByOpenid(userInfo.get("openid"));
-            if (gmUser != null) {
-                gmUserService.updateAccessDate(gmUser);
-            } else {
+            if (gmUser == null) {
                 gmUser = new GmUser();
                 gmUser.setOpenid(userInfo.get("openid"));
                 gmUser.setSessionKey(userInfo.get("session_key"));
                 gmUser.setNickName(loginUser.getNickName());
-                gmUser.md5();
                 gmUserService.login(gmUser);
             }
-            result.put("code", "0001");
-            result.put("token", gmUser.getToken());
+            result.put("code", "0000");
+            result.put("token", gmUserService.getToken(gmUser));
         } else {
             result.put("code", "0001");
         }

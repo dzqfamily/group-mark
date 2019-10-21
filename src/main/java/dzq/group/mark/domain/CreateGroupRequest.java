@@ -2,19 +2,8 @@ package dzq.group.mark.domain;
 
 public class CreateGroupRequest extends BaseRequest {
 
-    private String token;
     private String groupName;
     private String memberList;
-
-    @Override
-    public String getToken() {
-        return token;
-    }
-
-    @Override
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getGroupName() {
         return groupName;
@@ -30,5 +19,14 @@ public class CreateGroupRequest extends BaseRequest {
 
     public void setMemberList(String memberList) {
         this.memberList = memberList;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateGroupRequest{" +
+                "groupName='" + groupName + '\'' +
+                ", memberList='" + memberList + '\'' +
+                ", token='" + token + '\'' +
+                '}';
     }
 }
