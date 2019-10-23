@@ -5,11 +5,21 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class JJWTUtil {
 
-    public static String token(String openid,String signingKey) {
+    private static String signingKey;
+    static {
+        try {
+            signingKey = PropertiesUtil.getValue("password.properties", "signingKey");
+        } catch (IOException e) {
+            //skip
+        }
+    }
+
+    public static String token(String openid) {
 
         JwtBuilder builder= Jwts.builder()
                 .setId(openid)
@@ -18,7 +28,7 @@ public class JJWTUtil {
         return builder.compact();
     }
 
-    public static String parseJWT(String token,String signingKey) {
+    public static String parseJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(signingKey)
                 .parseClaimsJws(token).getBody();

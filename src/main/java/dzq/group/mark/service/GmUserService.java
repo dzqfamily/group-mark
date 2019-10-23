@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 public class GmUserService {
     @Autowired
     private GmUserMapper gmUserMapper;
-    @Value("${signingKey}")
-    private String signingKey;
+
     public void login(GmUser gmUser) {
         gmUserMapper.insert(gmUser);
     }
@@ -21,6 +20,13 @@ public class GmUserService {
         return gmUserMapper.getUserByOpenid(openid);
     }
     public String getToken(GmUser gmUser) {
-        return JJWTUtil.token(gmUser.getOpenid(), signingKey);
+        return JJWTUtil.token(gmUser.getOpenid());
     }
+
+
+    public GmUser getUserByToken(String token) {
+        String openid = JJWTUtil.parseJWT(token);
+        return gmUserMapper.getUserByOpenid(openid);
+    }
+
 }

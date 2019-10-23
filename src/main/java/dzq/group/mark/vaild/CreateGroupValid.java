@@ -11,7 +11,7 @@ public class CreateGroupValid extends BaseValid{
     public void vaild(CreateGroupRequest createGroupRequest) throws ValidException {
 
         checkObjectNull(createGroupRequest,"createGroupRequest");
-
+        checkStringNotNullLength(createGroupRequest.getGroupName(), 16, "团名");
 
     }
 }

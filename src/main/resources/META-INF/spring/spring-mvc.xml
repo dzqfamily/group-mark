@@ -17,5 +17,11 @@
 			</list>
 		</property>
 	</bean>
-
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="dzq.group.mark.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<mvc:annotation-driven />
 </beans>
