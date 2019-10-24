@@ -29,5 +29,26 @@
       #{openid,jdbcType=VARCHAR},now(), now()
       )
   </insert>
-
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into gm_group_member (group_id, member_name,
+      openid, created_date, modified_date
+      )values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.groupId,jdbcType=BIGINT}, #{item.memberName,jdbcType=VARCHAR},
+      #{item.openid,jdbcType=VARCHAR},now(), now()
+      )
+    </foreach>
+  </insert>
+  <select id="selectMemberByGroupIdSelf" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_group_member
+    where group_id = #{groupId,jdbcType=BIGINT} and openid = #{openid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectMemberByGroupId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_group_member
+    where group_id = #{groupId,jdbcType=BIGINT}
+  </select>
 </mapper>

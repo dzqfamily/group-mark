@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSON;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.BaseRequest;
 import dzq.group.mark.domain.CreateGroupRequest;
+import dzq.group.mark.domain.GmGroupMemberView;
+import dzq.group.mark.domain.MyGroupMemberRequest;
 import dzq.group.mark.entity.GmGroup;
+import dzq.group.mark.entity.GmGroupMember;
 import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.exception.ValidException;
 import dzq.group.mark.service.GmGroupService;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static dzq.group.mark.common.ValidExCode.PARAM_ERRO;
 
 @Controller
 @RequestMapping("/group")
@@ -77,6 +82,40 @@ public class GroupController {
 
             result.put("myGroupList", groupList);
             logger.info("GroupController myGroup size = " + groupList.size());
+
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/myGroupMember", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String myGroupMember(MyGroupMemberRequest myGroupMemberRequest) {
+
+        logger.info(myGroupMemberRequest);
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+
+            GmGroupMember gmGroupMemberSelf = gmGroupService.selectMyGroupMemberSelf(myGroupMemberRequest);
+            if (gmGroupMemberSelf == null) {
+                result.put("code", ValidExCode.PARAM_ERRO.getCode());
+                result.put("msg",  ValidExCode.PARAM_ERRO.getMsg());
+                return JSON.toJSONString(result);
+            }
+            List<GmGroupMemberView> groupMemberList = gmGroupService.selectMyGroupMember(myGroupMemberRequest);
+
+            result.put("groupMemberList", groupMemberList);
+            logger.info("GroupController myGroupMember size = " + groupMemberList.size());
 
         } catch (Exception e) {
             logger.info("GroupController create" + e);
