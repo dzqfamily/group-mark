@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GmGroupService {
@@ -75,8 +76,7 @@ public class GmGroupService {
     public List<GmGroupMemberView> selectMyGroupMember(MyGroupMemberRequest myGroupMemberRequest) {
         String openid = JJWTUtil.parseJWT(myGroupMemberRequest.getToken());
         List<GmGroupMember> gmGroupMemberList = gmGroupMemberMapper.selectMemberByGroupId(myGroupMemberRequest.getGroupId());
-        List<GmGroupMemberView> gmGroupMemberViewList = new ArrayList<>();
-        gmGroupMemberList.forEach(gmGroupMember -> {
+        List<GmGroupMemberView> gmGroupMemberViewList  = gmGroupMemberList.stream().map(gmGroupMember -> {
             GmGroupMemberView gmGroupMemberView = new GmGroupMemberView();
             gmGroupMemberView.setGroupId(gmGroupMember.getGroupId());
             gmGroupMemberView.setMemberName(gmGroupMember.getMemberName());
@@ -84,8 +84,8 @@ public class GmGroupService {
             if (openid.equals(gmGroupMember.getOpenid())) {
                 gmGroupMemberView.setSelf(true);
             }
-            gmGroupMemberViewList.add(gmGroupMemberView);
-        });
+            return gmGroupMemberView;
+        }).collect(Collectors.toList());
         return gmGroupMemberViewList;
     }
 }
