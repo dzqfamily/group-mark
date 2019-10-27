@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dzq.group.mark.mapper.GmDetailMoneyMapper" >
+  <resultMap id="BaseResultMap" type="dzq.group.mark.entity.GmDetailMoney" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="detail_id" property="detailId" jdbcType="BIGINT" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+    <result column="dir_type" property="dirType" jdbcType="VARCHAR" />
+    <result column="money_value" property="moneyValue" jdbcType="DECIMAL" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, detail_id, group_id, member_id, member_name, dir_type, money_value, created_date, 
+    modified_date
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gm_detail_money
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="dzq.group.mark.entity.GmDetailMoney" >
+    insert into gm_detail_money (id, detail_id, group_id, 
+      member_id, member_name, dir_type, 
+      money_value, created_date, modified_date
+      )
+    values (#{id,jdbcType=BIGINT}, #{detailId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, 
+      #{memberId,jdbcType=BIGINT}, #{memberName,jdbcType=VARCHAR}, #{dirType,jdbcType=VARCHAR}, 
+      #{moneyValue,jdbcType=DECIMAL}, #{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+</mapper>

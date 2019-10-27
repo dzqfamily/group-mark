@@ -41,21 +41,24 @@ public class GmGroupService {
         gmGroup.setOpenid(gmUser.getOpenid());
 
         gmGroupMapper.insert(gmGroup);
+        //创建自己
         List<GmGroupMember> gmGroupMemberList = new ArrayList<>();
-        if (!StringUtils.isEmpty(createGroupRequest.getMemberList())) {
-            Arrays.stream(createGroupRequest.getMemberList().split(",")).forEach(groupMember -> {
-                GmGroupMember ggm = new GmGroupMember();
-                ggm.setGroupId(gmGroup.getId());
-                ggm.setMemberName(groupMember);
-                gmGroupMemberList.add(ggm);
-            });
-        }
-        //创建者
         GmGroupMember ggm = new GmGroupMember();
         ggm.setGroupId(gmGroup.getId());
         ggm.setMemberName(gmUser.getNickName());
         ggm.setOpenid(gmUser.getOpenid());
         gmGroupMemberList.add(ggm);
+        //其他成员
+        if (!StringUtils.isEmpty(createGroupRequest.getMemberList())) {
+            Arrays.stream(createGroupRequest.getMemberList().split(",")).forEach(groupMember -> {
+                GmGroupMember other = new GmGroupMember();
+                other.setGroupId(gmGroup.getId());
+                other.setMemberName(groupMember);
+                gmGroupMemberList.add(other);
+            });
+        }
+        //创建者
+
         gmGroupMemberMapper.insertBatch(gmGroupMemberList);
 
     }
@@ -82,7 +85,7 @@ public class GmGroupService {
             gmGroupMemberView.setMemberName(gmGroupMember.getMemberName());
             gmGroupMemberView.setId(gmGroupMember.getId());
             if (openid.equals(gmGroupMember.getOpenid())) {
-                gmGroupMemberView.setSelf(true);
+                gmGroupMemberView.setMuchPeopleChecked(true);
             }
             return gmGroupMemberView;
         }).collect(Collectors.toList());

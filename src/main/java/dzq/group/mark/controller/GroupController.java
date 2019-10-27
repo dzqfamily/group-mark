@@ -130,41 +130,4 @@ public class GroupController {
 
     }
 
-//
-//    /**
-//     * 查找团员
-//     * @param groupId 团ID
-//     * @return 返回团员列表json
-//     */
-//    @RequestMapping(value = "/users", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String users(@RequestParam String groupId) {
-//        return "";
-//    }
-//
-//    /**
-//     * 团里增加成员
-//     * @param groupId 被关联团ID
-//     * @param userId 要关联的用户ID
-//     * @return
-//     */
-//    @RequestMapping(value = "/related", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String related(@RequestParam String groupId, @RequestParam String userId) {
-//        return "";
-//    }
-//
-//    /**
-//     * 团里增加成员
-//     * @param groupId 被关联团ID
-//     * @param userId 要关联的用户ID
-//     * @return
-//     */
-//    @RequestMapping(value = "/groupListByUser", produces = "text/html;charset=UTF-8", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String groupListByUser(@RequestParam String groupId, @RequestParam String userId) {
-//        return "";
-//    }
-
-
 }

@@ -1,19 +1,22 @@
-package dzq.group.mark.domain;
+package dzq.group.mark.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 团成员
- */
-public class GmGroupMemberView {
-
+public class GmDetailMoney {
     private Long id;
+
+    private Long detailId;
 
     private Long groupId;
 
+    private Long memberId;
+
     private String memberName;
 
-    private boolean muchPeopleChecked;
+    private String dirType;
+
+    private BigDecimal moneyValue;
 
     private Date createdDate;
 
@@ -27,12 +30,28 @@ public class GmGroupMemberView {
         this.id = id;
     }
 
+    public Long getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(Long detailId) {
+        this.detailId = detailId;
+    }
+
     public Long getGroupId() {
         return groupId;
     }
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     public String getMemberName() {
@@ -43,12 +62,20 @@ public class GmGroupMemberView {
         this.memberName = memberName;
     }
 
-    public boolean isMuchPeopleChecked() {
-        return muchPeopleChecked;
+    public String getDirType() {
+        return dirType;
     }
 
-    public void setMuchPeopleChecked(boolean muchPeopleChecked) {
-        this.muchPeopleChecked = muchPeopleChecked;
+    public void setDirType(String dirType) {
+        this.dirType = dirType;
+    }
+
+    public BigDecimal getMoneyValue() {
+        return moneyValue;
+    }
+
+    public void setMoneyValue(BigDecimal moneyValue) {
+        this.moneyValue = moneyValue;
     }
 
     public Date getCreatedDate() {
@@ -66,5 +93,4 @@ public class GmGroupMemberView {
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
-
 }
