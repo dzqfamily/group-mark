@@ -10,12 +10,12 @@
     <result column="much_people_flag" property="muchPeopleFlag" jdbcType="VARCHAR" />
     <result column="part_flag" property="partFlag" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
-
   <sql id="Base_Column_List" >
-    id, group_id, openid, project, money_value, much_people_flag, part_flag, remark, 
+    id, group_id, openid, project, money_value, much_people_flag, part_flag, remark, status,
     created_date, modified_date
   </sql>
 
@@ -26,15 +26,23 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
 
-  <insert id="insert" parameterType="dzq.group.mark.entity.GmDetail" >
-    insert into gm_detail (id, group_id, openid, 
+  <insert id="insert" parameterType="dzq.group.mark.entity.GmDetail" useGeneratedKeys="true" keyProperty="id">
+    insert into gm_detail (group_id, openid,
       project, money_value, much_people_flag, 
-      part_flag, remark, created_date, 
+      part_flag, remark,status, created_date,
       modified_date)
-    values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, 
+    values ( #{groupId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR},
       #{project,jdbcType=VARCHAR}, #{moneyValue,jdbcType=DECIMAL}, #{muchPeopleFlag,jdbcType=VARCHAR}, 
-      #{partFlag,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
-      #{modifiedDate,jdbcType=TIMESTAMP})
+      #{partFlag,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},  now(),
+      now())
   </insert>
-
+  <select id="unSetMoney" resultType="java.math.BigDecimal">
+    select ifnull(sum(money_value),0) from gm_detail where group_id = #{groupId,jdbcType=BIGINT} and status = '0'
+  </select>
+  <select id="selectDetailByGroupId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_detail
+    where group_id = #{groupId,jdbcType=BIGINT} order by created_date desc
+  </select>
 </mapper>

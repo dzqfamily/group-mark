@@ -1,5 +1,6 @@
 package dzq.group.mark.mapper;
 
+import dzq.group.mark.domain.GmGroupView;
 import dzq.group.mark.entity.GmGroup;
 
 import java.util.List;

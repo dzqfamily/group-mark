@@ -1,18 +1,20 @@
-package dzq.group.mark.entity;
+package dzq.group.mark.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class GmDetail {
+public class GmDetailView {
     private Long id;
 
     private Long groupId;
 
-    private String openid;
+    private String createNickName;
 
     private String project;
 
     private BigDecimal moneyValue;
+
+    private String moneyValueStr;
 
     private String muchPeopleFlag;
 
@@ -22,9 +24,35 @@ public class GmDetail {
 
     private String status;
 
+    private String statusName;
+
     private Date createdDate;
 
     private Date modifiedDate;
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getCreateNickName() {
+        return createNickName;
+    }
+
+    public void setCreateNickName(String createNickName) {
+        this.createNickName = createNickName;
+    }
+
+    public String getMoneyValueStr() {
+        return moneyValueStr;
+    }
+
+    public void setMoneyValueStr(String moneyValueStr) {
+        this.moneyValueStr = moneyValueStr;
+    }
 
     public String getStatus() {
         return status;
@@ -48,14 +76,6 @@ public class GmDetail {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
     }
 
     public String getProject() {

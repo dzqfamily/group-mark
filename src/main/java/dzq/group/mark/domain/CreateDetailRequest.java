@@ -1,6 +1,9 @@
 package dzq.group.mark.domain;
 
+import com.alibaba.fastjson.JSON;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CreateDetailRequest extends BaseRequest {
 
@@ -10,10 +13,10 @@ public class CreateDetailRequest extends BaseRequest {
     private boolean muchPeopleFlag;
     private boolean partFlag;
     private String remark;
-
-    private CreateDetailMoneyRequest muchPeopleDetailMoneyList;
-
-    private CreateDetailMoneyRequest partDetailMoneyList;
+    private String muchPeopleDetail;
+    private String partDetail;
+    private List<CreateDetailMoneyRequest> muchPeopleDetailMoneyList;
+    private List<CreateDetailMoneyRequest> partDetailMoneyList;
 
     public long getGroupId() {
         return groupId;
@@ -63,19 +66,38 @@ public class CreateDetailRequest extends BaseRequest {
         this.remark = remark;
     }
 
-    public CreateDetailMoneyRequest getMuchPeopleDetailMoneyList() {
+    public String getMuchPeopleDetail() {
+        return muchPeopleDetail;
+    }
+
+    public void setMuchPeopleDetail(String muchPeopleDetail) {
+        this.muchPeopleDetail = muchPeopleDetail;
+        this.muchPeopleDetailMoneyList = JSON.parseArray(muchPeopleDetail, CreateDetailMoneyRequest.class);
+
+    }
+
+    public List<CreateDetailMoneyRequest> getMuchPeopleDetailMoneyList() {
         return muchPeopleDetailMoneyList;
     }
 
-    public void setMuchPeopleDetailMoneyList(CreateDetailMoneyRequest muchPeopleDetailMoneyList) {
+    public void setMuchPeopleDetailMoneyList(List<CreateDetailMoneyRequest> muchPeopleDetailMoneyList) {
         this.muchPeopleDetailMoneyList = muchPeopleDetailMoneyList;
     }
 
-    public CreateDetailMoneyRequest getPartDetailMoneyList() {
+    public String getPartDetail() {
+        return partDetail;
+    }
+
+    public void setPartDetail(String partDetail) {
+        this.partDetail = partDetail;
+        this.partDetailMoneyList = JSON.parseArray(partDetail, CreateDetailMoneyRequest.class);
+    }
+
+    public List<CreateDetailMoneyRequest> getPartDetailMoneyList() {
         return partDetailMoneyList;
     }
 
-    public void setPartDetailMoneyList(CreateDetailMoneyRequest partDetailMoneyList) {
+    public void setPartDetailMoneyList(List<CreateDetailMoneyRequest> partDetailMoneyList) {
         this.partDetailMoneyList = partDetailMoneyList;
     }
 
@@ -88,8 +110,8 @@ public class CreateDetailRequest extends BaseRequest {
                 ", muchPeopleFlag=" + muchPeopleFlag +
                 ", partFlag=" + partFlag +
                 ", remark='" + remark + '\'' +
-                ", muchPeopleDetailMoneyList=" + muchPeopleDetailMoneyList +
-                ", partDetailMoneyList=" + partDetailMoneyList +
+                ", muchPeopleDetail=" + muchPeopleDetail +
+                ", partDetail=" + partDetail +
                 ", token='" + token + '\'' +
                 '}';
     }

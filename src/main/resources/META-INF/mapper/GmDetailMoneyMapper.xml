@@ -35,5 +35,17 @@
       #{moneyValue,jdbcType=DECIMAL}, #{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP}
       )
   </insert>
-
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into gm_detail_money (detail_id, group_id,
+      member_id, member_name, dir_type,
+      money_value, created_date, modified_date
+      )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.detailId,jdbcType=BIGINT}, #{item.groupId,jdbcType=BIGINT},
+      #{item.memberId,jdbcType=BIGINT}, #{item.memberName,jdbcType=VARCHAR}, #{item.dirType,jdbcType=VARCHAR},
+      #{item.moneyValue,jdbcType=DECIMAL}, now(), now()
+      )
+    </foreach>
+  </insert>
 </mapper>
