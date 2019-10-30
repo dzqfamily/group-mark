@@ -1,9 +1,6 @@
 package dzq.group.mark.service;
 
-import dzq.group.mark.domain.BaseRequest;
-import dzq.group.mark.domain.CreateGroupRequest;
-import dzq.group.mark.domain.GmGroupMemberView;
-import dzq.group.mark.domain.MyGroupMemberRequest;
+import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.GmGroup;
 import dzq.group.mark.entity.GmGroupMember;
 import dzq.group.mark.entity.GmUser;
@@ -90,5 +87,28 @@ public class GmGroupService {
             return gmGroupMemberView;
         }).collect(Collectors.toList());
         return gmGroupMemberViewList;
+    }
+
+    public void addGroupMember(AddGroupMemberRequest addGroupMemberRequest) {
+
+        GmGroupMember gmGroupMember = new GmGroupMember();
+        gmGroupMember.setMemberName(addGroupMemberRequest.getMemberAliasName());
+        gmGroupMember.setGroupId(addGroupMemberRequest.getGroupId());
+
+        gmGroupMemberMapper.insert(gmGroupMember);
+    }
+
+    public void modifyGroupName(ModifyGroupNameRequest modifyGroupNameRequest) {
+
+        GmGroup gmGroup = new GmGroup();
+        gmGroup.setId(modifyGroupNameRequest.getGroupId());
+        gmGroup.setGroupName(modifyGroupNameRequest.getGroupName());
+
+        gmGroupMapper.modifyGroupName(gmGroup);
+
+    }
+
+    public GmGroup selectGroupById(long groupId) {
+        return gmGroupMapper.selectByPrimaryKey(groupId);
     }
 }

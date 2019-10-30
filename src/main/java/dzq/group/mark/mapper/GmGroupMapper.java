@@ -11,4 +11,6 @@ public interface GmGroupMapper {
     GmGroup selectByPrimaryKey(Long id);
 
     List<GmGroup> selectMyGroup(String openid);
+
+    void modifyGroupName(GmGroup gmGroup);
 }

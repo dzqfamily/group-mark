@@ -32,4 +32,7 @@
     from gm_group
     where openid = #{openid,jdbcType=VARCHAR}
   </select>
+  <update id="modifyGroupName" parameterType="dzq.group.mark.entity.GmGroup">
+    update gm_group set group_name = #{groupName,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

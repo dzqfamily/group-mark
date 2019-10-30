@@ -16,4 +16,5 @@ public interface GmGroupMemberMapper {
     GmGroupMember selectMemberByGroupIdSelf(@Param("openid") String openid,@Param("groupId") long groupId);
 
     List<GmGroupMember> selectMemberByGroupId(long groupId);
+
 }

@@ -168,4 +168,78 @@ public class GroupController {
 
     }
 
+    @RequestMapping(value = "/addGroupMember", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String addGroupMember(AddGroupMemberRequest addGroupMemberRequest) {
+
+        logger.info(addGroupMemberRequest);
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+
+            gmGroupService.addGroupMember(addGroupMemberRequest);
+
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/modifyGroupName", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String modifyGroupName(ModifyGroupNameRequest modifyGroupNameRequest) {
+
+        logger.info(modifyGroupNameRequest);
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+
+            gmGroupService.modifyGroupName(modifyGroupNameRequest);
+
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/groupInfo", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String groupInfo(GroupInfoRequest groupInfoRequest) {
+
+        logger.info(groupInfoRequest);
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+
+            GmGroup gmGroup = gmGroupService.selectGroupById(groupInfoRequest.getGroupId());
+            result.put("gmGroup", gmGroup);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+
+        return JSON.toJSONString(result);
+
+    }
 }

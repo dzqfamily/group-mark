@@ -28,6 +28,8 @@ public class GmDetailView {
 
     private Date createdDate;
 
+    private String createdDateStr;
+
     private Date modifiedDate;
 
     public String getStatusName() {
@@ -132,5 +134,13 @@ public class GmDetailView {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public String getCreatedDateStr() {
+        return createdDateStr;
+    }
+
+    public void setCreatedDateStr(String createdDateStr) {
+        this.createdDateStr = createdDateStr;
     }
 }

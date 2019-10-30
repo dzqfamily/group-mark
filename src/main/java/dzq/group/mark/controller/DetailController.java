@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,7 @@ public class DetailController {
                 gmDetailView.setMoneyValueStr(gmDetail.getMoneyValue().stripTrailingZeros().toPlainString());
                 gmDetailView.setCreateNickName(getNickName(gmDetail.getOpenid()));
                 gmDetailView.setStatusName(DetailStatusCode.getMsgByCode(gmDetail.getStatus()));
+                gmDetailView.setCreatedDateStr(new SimpleDateFormat("MM-dd HH:mm:ss").format(gmDetail.getCreatedDate()));
                 return gmDetailView;
             }).collect(Collectors.toList());
 
