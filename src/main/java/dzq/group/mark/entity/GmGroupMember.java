@@ -11,6 +11,8 @@ public class GmGroupMember {
 
     private String openid;
 
+    private String status;
+
     private Date createdDate;
 
     private Date modifiedDate;
@@ -61,5 +63,13 @@ public class GmGroupMember {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

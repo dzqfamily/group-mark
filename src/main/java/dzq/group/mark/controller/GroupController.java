@@ -71,34 +71,6 @@ public class GroupController {
 
     }
 
-    @RequestMapping(value = "/myGroup", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
-    @ResponseBody
-    public String myGroup(BaseRequest baseRequest) {
-
-        logger.info(baseRequest);
-
-        Map<String, Object> result = new HashMap<>();
-
-        try {
-
-            List<GmGroup> groupList = gmGroupService.selectMyGroup(baseRequest);
-
-            result.put("myGroupList", groupList);
-            logger.info("GroupController myGroup size = " + groupList.size());
-
-        } catch (Exception e) {
-            logger.info("GroupController create" + e);
-            result.put("code", ValidExCode.ERROR.getCode());
-            result.put("msg",  ValidExCode.ERROR.getMsg());
-            return JSON.toJSONString(result);
-        }
-        result.put("code", ValidExCode.SUCCESS.getCode());
-        result.put("msg",  ValidExCode.SUCCESS.getMsg());
-
-        return JSON.toJSONString(result);
-
-    }
-
     @RequestMapping(value = "/myGroupView", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public String myGroupView(BaseRequest baseRequest) {
@@ -112,7 +84,6 @@ public class GroupController {
             List<GmGroup> groupList = gmGroupService.selectMyGroup(baseRequest);
             List<GmGroupView> groupViewList = new ArrayList<>();
             groupList.forEach(gmGroup -> {
-
                 GmGroupView gmGroupView = new GmGroupView();
                 BeanUtils.copyProperties(gmGroup, gmGroupView);
                 gmGroupView.setUnSetMoney(gmDetailService.unSetMoney(gmGroup.getId()).stripTrailingZeros().toPlainString());
@@ -239,6 +210,66 @@ public class GroupController {
         result.put("code", ValidExCode.SUCCESS.getCode());
         result.put("msg",  ValidExCode.SUCCESS.getMsg());
 
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/modifyGroupMemberName", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String modifyGroupMemberName(ModifyGroupMemberNameRequest modifyGroupMemberNameRequest) {
+
+        logger.info(modifyGroupMemberNameRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            gmGroupService.modifyGroupMemberName(modifyGroupMemberNameRequest);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/deleteMember", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteMember(DeleteMemberRequest deleteMemberRequest) {
+
+        logger.info(deleteMemberRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            gmGroupService.deleteMember(deleteMemberRequest);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/deleteGroup", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteGroup(DeleteGroupRequest deleteGroupRequest) {
+
+        logger.info(deleteGroupRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            gmGroupService.deleteGroup(deleteGroupRequest);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
         return JSON.toJSONString(result);
 
     }

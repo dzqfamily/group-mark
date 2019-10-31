@@ -17,4 +17,7 @@ public interface GmGroupMemberMapper {
 
     List<GmGroupMember> selectMemberByGroupId(long groupId);
 
+    void modifyGroupMemberName(GmGroupMember gmGroupMember);
+
+    void deleteMember(Long id);
 }

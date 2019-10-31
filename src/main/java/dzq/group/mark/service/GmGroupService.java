@@ -111,4 +111,21 @@ public class GmGroupService {
     public GmGroup selectGroupById(long groupId) {
         return gmGroupMapper.selectByPrimaryKey(groupId);
     }
+
+    public void modifyGroupMemberName(ModifyGroupMemberNameRequest modifyGroupMemberNameRequest) {
+
+        GmGroupMember gmGroupMember = new GmGroupMember();
+        gmGroupMember.setId(modifyGroupMemberNameRequest.getGroupMemberId());
+        gmGroupMember.setMemberName(modifyGroupMemberNameRequest.getGroupMemberName());
+
+        gmGroupMemberMapper.modifyGroupMemberName(gmGroupMember);
+    }
+
+    public void deleteMember(DeleteMemberRequest deleteMemberRequest) {
+        gmGroupMemberMapper.deleteMember(deleteMemberRequest.getGroupMemberId());
+    }
+
+    public void deleteGroup(DeleteGroupRequest deleteGroupRequest) {
+        gmGroupMapper.deleteGroup(deleteGroupRequest.getGroupId());
+    }
 }

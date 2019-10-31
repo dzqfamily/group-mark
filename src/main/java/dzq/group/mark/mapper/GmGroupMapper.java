@@ -1,5 +1,6 @@
 package dzq.group.mark.mapper;
 
+import dzq.group.mark.domain.DeleteGroupRequest;
 import dzq.group.mark.domain.GmGroupView;
 import dzq.group.mark.entity.GmGroup;
 
@@ -13,4 +14,6 @@ public interface GmGroupMapper {
     List<GmGroup> selectMyGroup(String openid);
 
     void modifyGroupName(GmGroup gmGroup);
+
+    void deleteGroup(Long id);
 }
