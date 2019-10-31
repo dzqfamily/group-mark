@@ -31,7 +31,7 @@
     select
     g.id, g.openid, g.group_name, g.status,g.created_date, g.modified_date
     from gm_group g left join gm_group_member gm on g.id = gm.group_id
-    where gm.openid = #{openid,jdbcType=VARCHAR} and g.status = '0' order by g.created_date asc
+    where gm.openid = #{openid,jdbcType=VARCHAR} and g.status = '0' and gm.status = '0' order by g.created_date asc
   </select>
   <update id="modifyGroupName" parameterType="dzq.group.mark.entity.GmGroup">
     update gm_group set group_name = #{groupName,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
