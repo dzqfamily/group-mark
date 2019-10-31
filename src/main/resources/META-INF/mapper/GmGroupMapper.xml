@@ -31,7 +31,9 @@
     select
     g.id, g.openid, g.group_name, g.status,g.created_date, g.modified_date
     from gm_group g left join gm_group_member gm on g.id = gm.group_id
-    where gm.openid = #{openid,jdbcType=VARCHAR} and g.status = '0' and gm.status = '0' order by g.created_date asc
+    where (gm.openid = #{openid,jdbcType=VARCHAR} and g.status = '0' and gm.status = '0') or (g.openid = #{openid,jdbcType=VARCHAR} and g.status = '0')
+    group by g.id, g.openid, g.group_name, g.status,g.created_date, g.modified_date
+    order by g.created_date asc
   </select>
   <update id="modifyGroupName" parameterType="dzq.group.mark.entity.GmGroup">
     update gm_group set group_name = #{groupName,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
@@ -39,4 +41,16 @@
   <delete id="deleteGroup">
     update gm_group set status = '1' where id = #{id,jdbcType=BIGINT}
   </delete>
+  <select id="selectMyCrtGroup" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_group
+    where openid = #{openid,jdbcType=VARCHAR} and status = '0'
+  </select>
+  <select id="selectGroupMyCreate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_group
+    where id = #{id,jdbcType=BIGINT} and openid = #{openid,jdbcType=VARCHAR} and status = '0'
+  </select>
 </mapper>

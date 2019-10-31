@@ -128,4 +128,14 @@ public class GmGroupService {
     public void deleteGroup(DeleteGroupRequest deleteGroupRequest) {
         gmGroupMapper.deleteGroup(deleteGroupRequest.getGroupId());
     }
+
+    public List<GmGroup> selectMyCrtGroup(BaseRequest baseRequest) {
+        String openid = JJWTUtil.parseJWT(baseRequest.getToken());
+        return gmGroupMapper.selectMyCrtGroup(openid);
+    }
+
+    public GmGroup selectGroupMyCreate(MyGroupMemberRequest myGroupMemberRequest) {
+        String openid = JJWTUtil.parseJWT(myGroupMemberRequest.getToken());
+        return gmGroupMapper.selectGroupMyCreate(myGroupMemberRequest.getGroupId(), openid);
+    }
 }

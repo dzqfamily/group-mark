@@ -116,7 +116,8 @@ public class GroupController {
         try {
 
             GmGroupMember gmGroupMemberSelf = gmGroupService.selectMyGroupMemberSelf(myGroupMemberRequest);
-            if (gmGroupMemberSelf == null) {
+            GmGroup gmGroup = gmGroupService.selectGroupMyCreate(myGroupMemberRequest);
+            if (gmGroupMemberSelf == null && gmGroup == null) {
                 result.put("code", ValidExCode.PARAM_ERRO.getCode());
                 result.put("msg",  ValidExCode.PARAM_ERRO.getMsg());
                 return JSON.toJSONString(result);
