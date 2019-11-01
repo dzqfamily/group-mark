@@ -1,9 +1,11 @@
 package dzq.group.mark.service;
 
-import dzq.group.mark.domain.CreateDetailRequest;
-import dzq.group.mark.domain.GmDetailView;
+import dzq.group.mark.common.DetailStatusCode;
+import dzq.group.mark.common.ValidExCode;
+import dzq.group.mark.domain.DetailRequest;
 import dzq.group.mark.entity.GmDetail;
 import dzq.group.mark.entity.GmDetailMoney;
+import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.mapper.GmDetailMapper;
 import dzq.group.mark.mapper.GmDetailMoneyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class GmDetailService {
     private GmDetailMoneyMapper gmDetailMoneyMapper;
 
     @Transactional(rollbackFor = Exception.class)
-    public void create(CreateDetailRequest createDetailRequest) {
+    public void create(DetailRequest createDetailRequest) {
 
         GmDetail gmDetail = createDetail(createDetailRequest);
         gmDetailMapper.insert(gmDetail);
@@ -36,7 +38,7 @@ public class GmDetailService {
 
     }
 
-    private List<GmDetailMoney> createDetailMoneyList(GmDetail gmDetail, CreateDetailRequest createDetailRequest) {
+    private List<GmDetailMoney> createDetailMoneyList(GmDetail gmDetail, DetailRequest createDetailRequest) {
         List<GmDetailMoney> gmDetailMoneyList = new ArrayList<>();
         createDetailRequest.getMuchPeopleDetailMoneyList().forEach(muchPeopleDetail ->{
             GmDetailMoney gmDetailMoney = new GmDetailMoney();
@@ -61,7 +63,7 @@ public class GmDetailService {
         return gmDetailMoneyList;
     }
 
-    private GmDetail createDetail(CreateDetailRequest createDetailRequest) {
+    private GmDetail createDetail(DetailRequest createDetailRequest) {
         GmDetail gmDetail = new GmDetail();
         gmDetail.setGroupId(createDetailRequest.getGroupId());
         gmDetail.setMoneyValue(createDetailRequest.getMoneyValue());
@@ -80,5 +82,16 @@ public class GmDetailService {
 
     public List<GmDetail> selectDetailByGroupId(long groupId) {
         return gmDetailMapper.selectDetailByGroupId(groupId);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void update(DetailRequest detailRequest) {
+
+        GmDetail gmDetail = gmDetailMapper.selectByPrimaryKey(detailRequest.getId());
+        if (gmDetail == null || !DetailStatusCode.INIT.getCode().equals(gmDetail.getStatus())) {
+            throw new GroupMarkException(ValidExCode.DETAIL_MODIFY_ERROR.getCode());
+        }
+
+
+
     }
 }

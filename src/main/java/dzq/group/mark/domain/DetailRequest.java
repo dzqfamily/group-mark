@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSON;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class CreateDetailRequest extends BaseRequest {
-
+public class DetailRequest extends BaseRequest {
+    private long id;
     private long groupId;
     private String project;
     private BigDecimal moneyValue;
@@ -17,6 +17,14 @@ public class CreateDetailRequest extends BaseRequest {
     private String partDetail;
     private List<CreateDetailMoneyRequest> muchPeopleDetailMoneyList;
     private List<CreateDetailMoneyRequest> partDetailMoneyList;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getGroupId() {
         return groupId;
@@ -103,7 +111,7 @@ public class CreateDetailRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "CreateDetailRequest{" +
+        return "DetailRequest{" +
                 "groupId=" + groupId +
                 ", project='" + project + '\'' +
                 ", moneyValue=" + moneyValue +

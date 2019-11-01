@@ -4,7 +4,8 @@ public enum ValidExCode {
     NOT_NULL("0001", "%s不能为空"),
     STRING_NOT_NULL("0002", "%s不能为空"),
     STRING_OVERLENGTH("0003", "%s超长"),
-    PARAM_ERRO("0004", "参数异常"),
+    PARAM_ERROR("0004", "参数异常"),
+    DETAIL_MODIFY_ERROR("0005", "明细修改失败"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");

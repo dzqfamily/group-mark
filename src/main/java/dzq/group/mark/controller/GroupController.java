@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dzq.group.mark.common.ValidExCode.PARAM_ERRO;
 
 @Controller
 @RequestMapping("/group")
@@ -118,8 +117,8 @@ public class GroupController {
             GmGroupMember gmGroupMemberSelf = gmGroupService.selectMyGroupMemberSelf(myGroupMemberRequest);
             GmGroup gmGroup = gmGroupService.selectGroupMyCreate(myGroupMemberRequest);
             if (gmGroupMemberSelf == null && gmGroup == null) {
-                result.put("code", ValidExCode.PARAM_ERRO.getCode());
-                result.put("msg",  ValidExCode.PARAM_ERRO.getMsg());
+                result.put("code", ValidExCode.PARAM_ERROR.getCode());
+                result.put("msg",  ValidExCode.PARAM_ERROR.getMsg());
                 return JSON.toJSONString(result);
             }
             List<GmGroupMemberView> groupMemberList = gmGroupService.selectMyGroupMember(myGroupMemberRequest);

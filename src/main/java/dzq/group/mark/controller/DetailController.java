@@ -5,19 +5,14 @@ import dzq.group.mark.common.DetailStatusCode;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.GmDetail;
-import dzq.group.mark.entity.GmGroup;
-import dzq.group.mark.entity.GmGroupMember;
 import dzq.group.mark.exception.ValidException;
 import dzq.group.mark.service.GmDetailService;
-import dzq.group.mark.service.GmGroupService;
 import dzq.group.mark.service.GmUserService;
 import dzq.group.mark.vaild.CreateDetailValid;
-import dzq.group.mark.vaild.CreateGroupValid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,15 +38,19 @@ public class DetailController {
 
     @RequestMapping(value = "/create", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
-    public String create(CreateDetailRequest createDetailRequest) {
+    public String create(DetailRequest detailRequest) {
 
-        logger.info(createDetailRequest);
+        logger.info(detailRequest);
 
         Map<String, String> result = new HashMap<>();
         try {
 
-            createDetailValid.vaild(createDetailRequest);
-            gmDetailService.create(createDetailRequest);
+            createDetailValid.vaild(detailRequest);
+            if (detailRequest.getId() > 0) {
+                gmDetailService.update(detailRequest);
+            }else{
+                gmDetailService.create(detailRequest);
+            }
 
         } catch (ValidException e) {
             result.put("code", e.getCode());
