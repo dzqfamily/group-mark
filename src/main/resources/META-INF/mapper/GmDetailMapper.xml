@@ -53,4 +53,10 @@
   <update id="deleteDetail">
     update gm_detail set status = '2' where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="unSetDetailList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_detail
+    where group_id = #{groupId,jdbcType=BIGINT} and status = '0'
+  </select>
 </mapper>

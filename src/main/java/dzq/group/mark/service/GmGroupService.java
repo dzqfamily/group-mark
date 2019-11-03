@@ -1,12 +1,8 @@
 package dzq.group.mark.service;
 
 import dzq.group.mark.domain.*;
-import dzq.group.mark.entity.GmGroup;
-import dzq.group.mark.entity.GmGroupMember;
-import dzq.group.mark.entity.GmUser;
-import dzq.group.mark.mapper.GmGroupMapper;
-import dzq.group.mark.mapper.GmGroupMemberMapper;
-import dzq.group.mark.mapper.GmUserMapper;
+import dzq.group.mark.entity.*;
+import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.JJWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +22,10 @@ public class GmGroupService {
     private GmGroupMapper gmGroupMapper;
     @Autowired
     private GmGroupMemberMapper gmGroupMemberMapper;
+    @Autowired
+    private GmDetailMapper gmDetailMapper;
+    @Autowired
+    private GmDetailMoneyMapper gmDetailMoneyMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void createGroup(CreateGroupRequest createGroupRequest) {
@@ -137,5 +136,56 @@ public class GmGroupService {
     public GmGroup selectGroupMyCreate(MyGroupMemberRequest myGroupMemberRequest) {
         String openid = JJWTUtil.parseJWT(myGroupMemberRequest.getToken());
         return gmGroupMapper.selectGroupMyCreate(myGroupMemberRequest.getGroupId(), openid);
+    }
+
+    public DoSetResponse doSet(DoSetRequest doSetRequest) {
+        DoSetResponse doSetResponse = new DoSetResponse();
+        List<GmDetail> unSetDetailList = gmDetailMapper.unSetDetailList(doSetRequest.getGroupId());
+        int setNum = 0;
+        String detailIdList = "";
+        BigDecimal setMoney = new BigDecimal(0);
+        Map<Long, MemberSetResponse> setResponseList = new HashMap<>();
+        for (GmDetail gmDetail : unSetDetailList) {
+            setNum++;
+            setMoney = setMoney.add(gmDetail.getMoneyValue());
+            detailIdList += gmDetail.getId();
+            if (unSetDetailList.size() != setNum) {
+                detailIdList += ",";
+            }
+            List<GmDetailMoney> detailMoneyList = gmDetailMoneyMapper.detailMoneyByDetailId(gmDetail.getId());
+            accumulate(setResponseList, detailMoneyList);
+        }
+        doSetResponse.setDetailIdList(detailIdList);
+        doSetResponse.setSetMoney(setMoney);
+        doSetResponse.setSetNum(setNum);
+        doSetResponse.setSetResponseList(setResponseList.values().stream()
+                .filter(memberSetResponse -> memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) == 0)
+                .map(memberSetResponse -> {
+                    if (memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) > 0) {
+                        memberSetResponse.setDirection("I");
+                    } else {
+                        memberSetResponse.setDirection("D");
+                    }
+                    return memberSetResponse;
+                })
+                .sorted(Comparator.comparing(MemberSetResponse::getSetMoney)).collect(Collectors.toList()));
+
+        return doSetResponse;
+    }
+
+    private void accumulate(Map<Long, MemberSetResponse> setResponseList, List<GmDetailMoney> detailMoneyList) {
+
+        for (GmDetailMoney gmDetailMoney : detailMoneyList) {
+            MemberSetResponse memberSetResponse = setResponseList.get(gmDetailMoney.getMemberId());
+            if (memberSetResponse == null) {
+                memberSetResponse = new MemberSetResponse();
+                memberSetResponse.setGroupMemberId(gmDetailMoney.getMemberId());
+                memberSetResponse.setMemberName(gmDetailMoney.getMemberName());
+                memberSetResponse.accumulate(gmDetailMoney.getDirType(), gmDetailMoney.getMoneyValue());
+            }else{
+                memberSetResponse.accumulate(gmDetailMoney.getDirType(), gmDetailMoney.getMoneyValue());
+            }
+        }
+
     }
 }

@@ -18,4 +18,6 @@ public interface GmDetailMapper {
     void updateDetail(GmDetail gmDetail);
 
     void deleteDetail(long id);
+
+    List<GmDetail> unSetDetailList(long groupId);
 }
