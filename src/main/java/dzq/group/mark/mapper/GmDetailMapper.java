@@ -14,4 +14,8 @@ public interface GmDetailMapper {
     BigDecimal unSetMoney(long groupId);
 
     List<GmDetail> selectDetailByGroupId(long groupId);
+
+    void updateDetail(GmDetail gmDetail);
+
+    void deleteDetail(long id);
 }

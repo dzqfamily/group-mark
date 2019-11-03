@@ -102,6 +102,52 @@ public class DetailController {
 
     }
 
+    @RequestMapping(value = "/detailInfo", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String detailInfo(DetailInfoRequest detailInfoRequest) {
+
+        logger.info(detailInfoRequest);
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+
+            String detailInfo = gmDetailService.selectDetailInfo(detailInfoRequest);
+            result.put("detailInfo", detailInfo);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg", ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg", ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
+
+
+    @RequestMapping(value = "/deleteDetail", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteDetail(DeleteDetailRequest deleteDetailRequest) {
+
+        logger.info(deleteDetailRequest);
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+
+            gmDetailService.deleteDetail(deleteDetailRequest);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg", ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg", ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
+
     private String getNickName(String openid) {
         return gmUserService.getUserByOpenid(openid).getNickName();
     }

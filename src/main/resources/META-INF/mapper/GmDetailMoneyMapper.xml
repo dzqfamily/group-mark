@@ -48,4 +48,13 @@
       )
     </foreach>
   </insert>
+  <select id="detailMoneyByDetailId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_detail_money
+    where detail_id = #{detailId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByDetailId">
+    delete from gm_detail_money where detail_id = #{detailId,jdbcType=BIGINT}
+  </delete>
 </mapper>

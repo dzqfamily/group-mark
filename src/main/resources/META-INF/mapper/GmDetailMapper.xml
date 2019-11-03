@@ -43,6 +43,14 @@
     select
     <include refid="Base_Column_List" />
     from gm_detail
-    where group_id = #{groupId,jdbcType=BIGINT} order by created_date desc
+    where group_id = #{groupId,jdbcType=BIGINT} and status != '2' order by created_date desc
   </select>
+  <update id="updateDetail" parameterType="dzq.group.mark.entity.GmDetail">
+    update gm_detail set project = #{project,jdbcType=VARCHAR}, money_value = #{moneyValue,jdbcType=DECIMAL},
+      much_people_flag = #{muchPeopleFlag,jdbcType=VARCHAR}, part_flag = #{partFlag,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="deleteDetail">
+    update gm_detail set status = '2' where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

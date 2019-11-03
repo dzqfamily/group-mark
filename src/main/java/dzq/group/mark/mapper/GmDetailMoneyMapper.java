@@ -10,4 +10,8 @@ public interface GmDetailMoneyMapper {
     GmDetailMoney selectByPrimaryKey(Long id);
 
     void insertBatch(List<GmDetailMoney> gmDetailMoneyList);
+
+    List<GmDetailMoney> detailMoneyByDetailId(long detailId);
+
+    void deleteByDetailId(Long id);
 }
