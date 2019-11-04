@@ -20,4 +20,8 @@ public interface GmDetailMapper {
     void deleteDetail(long id);
 
     List<GmDetail> unSetDetailList(long groupId);
+
+    int setDetail(List<Long> detailIdArray);
+
+    List<GmDetail> selectByIdList(List<Long> detailIdList);
 }

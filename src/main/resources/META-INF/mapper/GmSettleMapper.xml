@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dzq.group.mark.mapper.GmSettleMapper" >
+  <resultMap id="BaseResultMap" type="dzq.group.mark.entity.GmSettle" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="set_num" property="setNum" jdbcType="INTEGER" />
+    <result column="set_money" property="setMoney" jdbcType="DECIMAL" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, group_id, set_num, set_money, created_date, modified_date
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gm_settle
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="dzq.group.mark.entity.GmSettle" useGeneratedKeys="true" keyProperty="id">
+    insert into gm_settle (group_id, set_num,
+      set_money, created_date, modified_date
+      )
+    values (#{groupId,jdbcType=BIGINT}, #{setNum,jdbcType=INTEGER},
+      #{setMoney,jdbcType=DECIMAL}, now(), now()
+      )
+  </insert>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dzq.group.mark.mapper.GmSettleDetailMapper" >
+  <resultMap id="BaseResultMap" type="dzq.group.mark.entity.GmSettleDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="settle_id" property="settleId" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="VARCHAR" />
+    <result column="set_money" property="setMoney" jdbcType="DECIMAL" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, settle_id, member_id, member_name, direction, set_money, created_date, modified_date
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gm_settle_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="dzq.group.mark.entity.GmSettleDetail" >
+    insert into gm_settle_detail (id, settle_id, member_id,
+      member_name, direction, set_money,
+      created_date, modified_date)
+    values (#{id,jdbcType=BIGINT}, #{settleId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT},
+      #{memberName,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{setMoney,jdbcType=DECIMAL},
+      #{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into gm_settle_detail (settle_id, member_id,
+      member_name, direction, set_money,
+      created_date, modified_date)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.settleId,jdbcType=BIGINT}, #{item.memberId,jdbcType=BIGINT},
+      #{item.memberName,jdbcType=VARCHAR}, #{item.direction,jdbcType=VARCHAR}
+        , #{item.setMoney,jdbcType=DECIMAL}
+        , now(), now()
+      )
+    </foreach>
+  </insert>
+</mapper>

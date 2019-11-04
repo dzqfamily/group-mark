@@ -12,7 +12,17 @@ public class MemberSetResponse {
 
     private String direction;
 
+    private String dirName;
+
     private BigDecimal setMoney = new BigDecimal(0);
+
+    public String getDirName() {
+        return dirName;
+    }
+
+    public void setDirName(String dirName) {
+        this.dirName = dirName;
+    }
 
     public long getGroupMemberId() {
         return groupMemberId;
@@ -48,10 +58,10 @@ public class MemberSetResponse {
 
     public void accumulate(String dirType, BigDecimal moneyValue) {
         if ("payer".equals(dirType)) {
-            setMoney.add(moneyValue);
+            this.setMoney = this.setMoney.add(moneyValue);
         }
-        if ("share".equals(moneyValue)) {
-            setMoney.subtract(moneyValue);
+        if ("share".equals(dirType)) {
+            this.setMoney = this.setMoney.subtract(moneyValue);
         }
     }
 }

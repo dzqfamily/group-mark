@@ -1,7 +1,10 @@
 package dzq.group.mark.service;
 
+import dzq.group.mark.common.DirectionCode;
+import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.*;
+import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.JJWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GmGroupService {
@@ -26,6 +30,10 @@ public class GmGroupService {
     private GmDetailMapper gmDetailMapper;
     @Autowired
     private GmDetailMoneyMapper gmDetailMoneyMapper;
+    @Autowired
+    private GmSettleMapper gmSettleMapper;
+    @Autowired
+    private GmSettleDetailMapper gmSettleDetailMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void createGroup(CreateGroupRequest createGroupRequest) {
@@ -139,8 +147,18 @@ public class GmGroupService {
     }
 
     public DoSetResponse doSet(DoSetRequest doSetRequest) {
-        DoSetResponse doSetResponse = new DoSetResponse();
+
         List<GmDetail> unSetDetailList = gmDetailMapper.unSetDetailList(doSetRequest.getGroupId());
+
+        return accumulateResponse(unSetDetailList);
+
+
+    }
+
+    private DoSetResponse accumulateResponse(List<GmDetail> unSetDetailList) {
+
+        DoSetResponse doSetResponse = new DoSetResponse();
+
         int setNum = 0;
         String detailIdList = "";
         BigDecimal setMoney = new BigDecimal(0);
@@ -159,16 +177,17 @@ public class GmGroupService {
         doSetResponse.setSetMoney(setMoney);
         doSetResponse.setSetNum(setNum);
         doSetResponse.setSetResponseList(setResponseList.values().stream()
-                .filter(memberSetResponse -> memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) == 0)
-                .map(memberSetResponse -> {
+                .filter(memberSetResponse -> memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) != 0)
+                .peek(memberSetResponse -> {
                     if (memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) > 0) {
                         memberSetResponse.setDirection("I");
+                        memberSetResponse.setDirName(DirectionCode.getMsgByCode("I"));
                     } else {
                         memberSetResponse.setDirection("D");
+                        memberSetResponse.setDirName(DirectionCode.getMsgByCode("D"));
                     }
-                    return memberSetResponse;
                 })
-                .sorted(Comparator.comparing(MemberSetResponse::getSetMoney)).collect(Collectors.toList()));
+                .sorted(Comparator.comparing(MemberSetResponse::getSetMoney).reversed()).collect(Collectors.toList()));
 
         return doSetResponse;
     }
@@ -182,10 +201,47 @@ public class GmGroupService {
                 memberSetResponse.setGroupMemberId(gmDetailMoney.getMemberId());
                 memberSetResponse.setMemberName(gmDetailMoney.getMemberName());
                 memberSetResponse.accumulate(gmDetailMoney.getDirType(), gmDetailMoney.getMoneyValue());
+                setResponseList.put(gmDetailMoney.getMemberId(), memberSetResponse);
             }else{
                 memberSetResponse.accumulate(gmDetailMoney.getDirType(), gmDetailMoney.getMoneyValue());
             }
         }
 
+    }
+
+    public void setDetail(SetDetailRequest setDetailRequest) {
+        List<Long> detailIdList = Stream.of(setDetailRequest.getDetailIdList().split(","))
+                .map(detailIdStr -> Long.parseLong(detailIdStr)).collect(Collectors.toList());
+        int setNum = gmDetailMapper.setDetail(detailIdList);
+        if (setNum != detailIdList.size()) {
+            throw new GroupMarkException(ValidExCode.SET_DETAIL_NUM_ERROR.getCode());
+        }
+        List<GmDetail> detailList = gmDetailMapper.selectByIdList(detailIdList);
+        DoSetResponse doSetResponse = accumulateResponse(detailList);
+
+        GmSettle gmSettle = createSettle(setDetailRequest,doSetResponse);
+        gmSettleMapper.insert(gmSettle);
+        List<GmSettleDetail> gmSettleDetailList = createSettleDetail(gmSettle, doSetResponse);
+        gmSettleDetailMapper.insertBatch(gmSettleDetailList);
+    }
+
+    private List<GmSettleDetail> createSettleDetail(GmSettle gmSettle, DoSetResponse doSetResponse) {
+        return doSetResponse.getSetResponseList().stream().map(memberSetResponse -> {
+            GmSettleDetail gmSettleDetail = new GmSettleDetail();
+            gmSettleDetail.setDirection(memberSetResponse.getDirection());
+            gmSettleDetail.setMemberId(memberSetResponse.getGroupMemberId());
+            gmSettleDetail.setMemberName(memberSetResponse.getMemberName());
+            gmSettleDetail.setSetMoney(memberSetResponse.getSetMoney());
+            gmSettleDetail.setSettleId(gmSettle.getId());
+            return gmSettleDetail;
+        }).collect(Collectors.toList());
+    }
+
+    private GmSettle createSettle(SetDetailRequest setDetailRequest,DoSetResponse doSetResponse) {
+        GmSettle gmSettle = new GmSettle();
+        gmSettle.setGroupId(setDetailRequest.getGroupId());
+        gmSettle.setSetMoney(doSetResponse.getSetMoney());
+        gmSettle.setSetNum(doSetResponse.getSetNum());
+        return gmSettle;
     }
 }

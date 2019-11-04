@@ -294,4 +294,24 @@ public class GroupController {
         return JSON.toJSONString(result);
 
     }
+
+    @RequestMapping(value = "/setDetail", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String setDetail(SetDetailRequest setDetailRequest) {
+
+        logger.info(setDetailRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            gmGroupService.setDetail(setDetailRequest);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
 }
