@@ -59,22 +59,22 @@
     from gm_detail
     where group_id = #{groupId,jdbcType=BIGINT} and status = '0'
   </select>
-  <update id="setDetail" parameterType="java.lang.List">
+  <update id="setDetail" parameterType="java.util.List">
     update gm_detail set status = '1' where
     id in (
     <foreach collection="list" item="item" index="index" separator=",">
-       #{item.detailId,jdbcType=BIGINT}
+       #{item,jdbcType=BIGINT}
     </foreach>
-    )
+    ) and status = '0'
   </update>
-  <select id="selectByIdList" parameterType="java.lang.List">
+  <select id="selectByIdList" resultMap="BaseResultMap" parameterType="java.util.List">
     select
     <include refid="Base_Column_List" />
     from gm_detail
     where
     id in (
     <foreach collection="list" item="item" index="index" separator=",">
-      #{item.detailId,jdbcType=BIGINT}
+      #{item,jdbcType=BIGINT}
     </foreach>
     )
   </select>

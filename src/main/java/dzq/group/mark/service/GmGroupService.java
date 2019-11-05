@@ -209,7 +209,7 @@ public class GmGroupService {
         }
 
     }
-
+    @Transactional(rollbackFor = Exception.class)
     public void setDetail(SetDetailRequest setDetailRequest) {
         List<Long> detailIdList = Stream.of(setDetailRequest.getDetailIdList().split(","))
                 .map(detailIdStr -> Long.parseLong(detailIdStr)).collect(Collectors.toList());
