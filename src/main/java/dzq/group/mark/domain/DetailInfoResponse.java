@@ -3,7 +3,7 @@ package dzq.group.mark.domain;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class DetailInfoResponse extends BaseRequest {
+public class DetailInfoResponse {
     private long id;
     private long groupId;
     private String project;

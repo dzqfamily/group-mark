@@ -314,4 +314,46 @@ public class GroupController {
         return JSON.toJSONString(result);
 
     }
+
+    @RequestMapping(value = "/settleList", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String settleList(GroupInfoRequest groupInfoRequest) {
+
+        logger.info(groupInfoRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            List<SettleResponse> settleList = gmGroupService.settleList(groupInfoRequest);
+            result.put("settleList", settleList);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
+
+    @RequestMapping(value = "/settleInfo", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String settleInfo(SettleInfoRequest settleInfoRequest) {
+
+        logger.info(settleInfoRequest);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            SettleResponse settleResponse = gmGroupService.settleInfo(settleInfoRequest);
+            result.put("settleResponse", settleResponse);
+        } catch (Exception e) {
+            logger.info("GroupController create" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
+        return JSON.toJSONString(result);
+
+    }
 }

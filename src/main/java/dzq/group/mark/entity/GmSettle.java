@@ -12,9 +12,19 @@ public class GmSettle {
 
     private BigDecimal setMoney;
 
+    private String openid;
+
     private Date createdDate;
 
     private Date modifiedDate;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public Long getId() {
         return id;

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -242,6 +243,54 @@ public class GmGroupService {
         gmSettle.setGroupId(setDetailRequest.getGroupId());
         gmSettle.setSetMoney(doSetResponse.getSetMoney());
         gmSettle.setSetNum(doSetResponse.getSetNum());
+        gmSettle.setOpenid(gmUserService.getUserByToken(setDetailRequest.getToken()).getOpenid());
         return gmSettle;
     }
+
+    public List<SettleResponse> settleList(GroupInfoRequest groupInfoRequest) {
+        List<GmSettle> settleList = gmSettleMapper.selectSettleList(groupInfoRequest.getGroupId());
+
+        return settleList.stream().map(settle ->{
+            SettleResponse settleResponse = settleResponse(settle);
+            return settleResponse;
+        }).collect(Collectors.toList());
+    }
+
+    private SettleResponse settleResponse(GmSettle settle) {
+        SettleResponse settleResponse = new SettleResponse();
+        settleResponse.setCreatedDate(settle.getCreatedDate());
+        settleResponse.setSetMoney(settle.getSetMoney());
+        settleResponse.setGroupId(settle.getGroupId());
+        settleResponse.setNickName(gmUserService.getUserByOpenid(settle.getOpenid()).getNickName());
+        settleResponse.setSetNum(settle.getSetNum());
+        settleResponse.setCreatedDateStr(new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(settle.getCreatedDate()));
+        settleResponse.setId(settle.getId());
+        return settleResponse;
+    }
+
+    public SettleResponse settleInfo(SettleInfoRequest settleInfoRequest) {
+        GmSettle gmSettle = gmSettleMapper.selectByPrimaryKey(settleInfoRequest.getSettleId());
+        SettleResponse settleResponse = createSettleResponse(gmSettle);
+        return settleResponse;
+    }
+
+    private SettleResponse createSettleResponse(GmSettle settle) {
+        SettleResponse settleResponse = settleResponse(settle);
+
+        List<GmSettleDetail> settleDetailList = gmSettleDetailMapper.selectDetailBySettleId(settle.getId());
+
+        settleResponse.setMemberSetList(settleDetailList.stream().map(gmSettleDetail -> {
+            MemberSetResponse memberSetResponse = new MemberSetResponse();
+            memberSetResponse.setDirection(gmSettleDetail.getDirection());
+            memberSetResponse.setDirName(DirectionCode.getMsgByCode(gmSettleDetail.getDirection()));
+            memberSetResponse.setGroupMemberId(gmSettleDetail.getMemberId());
+            memberSetResponse.setMemberName(gmSettleDetail.getMemberName());
+            memberSetResponse.setSetMoney(gmSettleDetail.getSetMoney());
+            return memberSetResponse;
+        }).collect(Collectors.toList()));
+
+        return settleResponse;
+    }
+
+
 }

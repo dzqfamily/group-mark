@@ -11,4 +11,5 @@ public interface GmSettleDetailMapper {
 
     void insertBatch(List<GmSettleDetail> gmSettleDetailList);
 
+    List<GmSettleDetail> selectDetailBySettleId(Long settleId);
 }

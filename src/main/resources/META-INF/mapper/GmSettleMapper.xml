@@ -6,12 +6,13 @@
     <result column="group_id" property="groupId" jdbcType="BIGINT" />
     <result column="set_num" property="setNum" jdbcType="INTEGER" />
     <result column="set_money" property="setMoney" jdbcType="DECIMAL" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, group_id, set_num, set_money, created_date, modified_date
+    id, group_id, set_num, set_money,openid, created_date, modified_date
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -23,11 +24,16 @@
 
   <insert id="insert" parameterType="dzq.group.mark.entity.GmSettle" useGeneratedKeys="true" keyProperty="id">
     insert into gm_settle (group_id, set_num,
-      set_money, created_date, modified_date
+      set_money,openid, created_date, modified_date
       )
     values (#{groupId,jdbcType=BIGINT}, #{setNum,jdbcType=INTEGER},
-      #{setMoney,jdbcType=DECIMAL}, now(), now()
+      #{setMoney,jdbcType=DECIMAL},#{openid,jdbcType=VARCHAR}, now(), now()
       )
   </insert>
-
+  <select id="selectSettleList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_settle
+    where group_id = #{groupId,jdbcType=BIGINT}
+  </select>
 </mapper>
