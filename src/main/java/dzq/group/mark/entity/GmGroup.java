@@ -13,8 +13,6 @@ public class GmGroup {
 
     private int memberNum;
 
-    private int detailNum;
-
     private Date createdDate;
 
     private Date modifiedDate;
@@ -25,14 +23,6 @@ public class GmGroup {
 
     public void setMemberNum(int memberNum) {
         this.memberNum = memberNum;
-    }
-
-    public int getDetailNum() {
-        return detailNum;
-    }
-
-    public void setDetailNum(int detailNum) {
-        this.detailNum = detailNum;
     }
 
     public Long getId() {

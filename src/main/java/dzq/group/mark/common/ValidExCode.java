@@ -7,6 +7,10 @@ public enum ValidExCode {
     PARAM_ERROR("0004", "参数异常"),
     DETAIL_MODIFY_ERROR("0005", "明细修改失败"),
     SET_DETAIL_NUM_ERROR("0006", "结算失败"),
+    GROUP_LIMIT_ERROR("0007", "团超过上限"),
+    CREATE_GROUP_FREQUENT("0008", "创建团频繁"),
+    MEMBER_LIMIT_ERROR("0009", "团员超过上限"),
+    CREATE_MEMBER_FREQUENT("0010", "创建团员频繁"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");

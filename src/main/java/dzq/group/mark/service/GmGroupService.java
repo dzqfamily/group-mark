@@ -41,6 +41,8 @@ public class GmGroupService {
 
         GmUser gmUser = gmUserService.getUserByToken(createGroupRequest.getToken());
 
+        checkGroupLimit(gmUser);
+
         GmGroup gmGroup = new GmGroup();
         gmGroup.setGroupName(createGroupRequest.getGroupName());
         gmGroup.setOpenid(gmUser.getOpenid());
@@ -63,9 +65,33 @@ public class GmGroupService {
             });
         }
         //创建者
-
+        checkMemberLimit(gmUser, gmGroup, gmGroupMemberList.size());
         gmGroupMemberMapper.insertBatch(gmGroupMemberList);
 
+    }
+
+    private void checkMemberLimit(GmUser gmUser, GmGroup gmGroup, int memberNum) {
+
+        if (gmGroup.getMemberNum() + memberNum > gmUser.getMemberLimit()) {
+            throw new GroupMarkException(ValidExCode.MEMBER_LIMIT_ERROR.getCode());
+        }
+
+        int count = gmGroupMapper.addMemberNum(memberNum, gmGroup);
+        if (count == 0) {
+            throw new GroupMarkException(ValidExCode.CREATE_MEMBER_FREQUENT.getCode());
+        }
+
+    }
+
+    private void checkGroupLimit(GmUser gmUser) {
+
+        if (gmUser.getGroupLimit() + 1 > gmUser.getGroupLimit()) {
+            throw new GroupMarkException(ValidExCode.GROUP_LIMIT_ERROR.getCode());
+        }
+        int count = gmUserService.addGroupNum(gmUser);
+        if (count == 0) {
+            throw new GroupMarkException(ValidExCode.CREATE_GROUP_FREQUENT.getCode());
+        }
     }
 
     public List<GmGroup> selectMyGroup(BaseRequest baseRequest) {
@@ -98,6 +124,11 @@ public class GmGroupService {
     }
 
     public void addGroupMember(AddGroupMemberRequest addGroupMemberRequest) {
+
+        GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(addGroupMemberRequest.getGroupId());
+        GmUser gmUser = gmUserService.getUserByOpenid(gmGroup.getOpenid());
+
+        checkMemberLimit(gmUser, gmGroup, 1);
 
         GmGroupMember gmGroupMember = new GmGroupMember();
         gmGroupMember.setMemberName(addGroupMemberRequest.getMemberAliasName());

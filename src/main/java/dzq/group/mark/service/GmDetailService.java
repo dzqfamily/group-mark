@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSON;
 import dzq.group.mark.common.DetailStatusCode;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
-import dzq.group.mark.entity.GmDetail;
-import dzq.group.mark.entity.GmDetailMoney;
-import dzq.group.mark.entity.GmGroupMember;
+import dzq.group.mark.entity.*;
 import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.mapper.GmDetailMapper;
 import dzq.group.mark.mapper.GmDetailMoneyMapper;
@@ -17,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,18 +31,30 @@ public class GmDetailService {
     private GmDetailMoneyMapper gmDetailMoneyMapper;
     @Autowired
     private GmGroupMemberMapper gmGroupMemberMapper;
+    @Autowired
+    private GmGroupMapper gmGroupMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void create(DetailRequest detailRequest) {
 
+        GmUser gmUser = gmUserService.getUserByToken(detailRequest.getToken());
 
+        checkDetailLimt(gmUser, detailRequest);
 
-        GmDetail gmDetail = createDetail(detailRequest);
+        GmDetail gmDetail = createDetail(detailRequest, gmUser);
         gmDetailMapper.insert(gmDetail);
 
         List<GmDetailMoney> gmDetailMoneyList = createDetailMoneyList(gmDetail, detailRequest);
 
         gmDetailMoneyMapper.insertBatch(gmDetailMoneyList);
+
+
+    }
+
+    private void checkDetailLimt(GmUser gmUser, DetailRequest detailRequest) {
+
+        String yyyyMM = new SimpleDateFormat("yyyyMM").format(new Date());
+
 
 
     }
@@ -72,15 +84,15 @@ public class GmDetailService {
         return gmDetailMoneyList;
     }
 
-    private GmDetail createDetail(DetailRequest createDetailRequest) {
+    private GmDetail createDetail(DetailRequest detailRequest,GmUser gmUser) {
         GmDetail gmDetail = new GmDetail();
-        gmDetail.setGroupId(createDetailRequest.getGroupId());
-        gmDetail.setMoneyValue(createDetailRequest.getMoneyValue());
-        gmDetail.setMuchPeopleFlag(createDetailRequest.isMuchPeopleFlag() ? "Y" : "N");
-        gmDetail.setOpenid(gmUserService.getUserByToken(createDetailRequest.getToken()).getOpenid());
-        gmDetail.setPartFlag(createDetailRequest.isPartFlag() ? "Y" : "N");
-        gmDetail.setProject(createDetailRequest.getProject());
-        gmDetail.setRemark(createDetailRequest.getRemark());
+        gmDetail.setGroupId(detailRequest.getGroupId());
+        gmDetail.setMoneyValue(detailRequest.getMoneyValue());
+        gmDetail.setMuchPeopleFlag(detailRequest.isMuchPeopleFlag() ? "Y" : "N");
+        gmDetail.setOpenid(gmUser.getOpenid());
+        gmDetail.setPartFlag(detailRequest.isPartFlag() ? "Y" : "N");
+        gmDetail.setProject(detailRequest.getProject());
+        gmDetail.setRemark(detailRequest.getRemark());
         gmDetail.setStatus("0");
         return gmDetail;
     }

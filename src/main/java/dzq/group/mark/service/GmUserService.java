@@ -29,4 +29,8 @@ public class GmUserService {
         return gmUserMapper.getUserByOpenid(openid);
     }
 
+    public int addGroupNum(GmUser gmUser) {
+        return gmUserMapper.addGroupNum(gmUser);
+    }
+
 }

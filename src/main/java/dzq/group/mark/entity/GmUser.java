@@ -15,6 +15,12 @@ public class GmUser {
 
     private int groupNum;
 
+    private int groupLimit;
+
+    private int memberLimit;
+
+    private int detailLimit;
+
     private Date accessDate;
 
     private Date createdDate;
@@ -85,4 +91,27 @@ public class GmUser {
         this.modifiedDate = modifiedDate;
     }
 
+    public int getGroupLimit() {
+        return groupLimit;
+    }
+
+    public void setGroupLimit(int groupLimit) {
+        this.groupLimit = groupLimit;
+    }
+
+    public int getMemberLimit() {
+        return memberLimit;
+    }
+
+    public void setMemberLimit(int memberLimit) {
+        this.memberLimit = memberLimit;
+    }
+
+    public int getDetailLimit() {
+        return detailLimit;
+    }
+
+    public void setDetailLimit(int detailLimit) {
+        this.detailLimit = detailLimit;
+    }
 }

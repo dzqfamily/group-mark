@@ -26,6 +26,12 @@ public class LoginController {
     private String appid;
     @Value("${appSecret}")
     private String appSecret;
+    @Value("${groupLimit}")
+    private int groupLimit;
+    @Value("${memberLimit}")
+    private int memberLimit;
+    @Value("${detailLimit}")
+    private int detailLimit;
     @Autowired
     private GmUserService gmUserService;
 
@@ -53,6 +59,9 @@ public class LoginController {
                 gmUser.setOpenid(userInfo.get("openid"));
                 gmUser.setSessionKey(userInfo.get("session_key"));
                 gmUser.setNickName(loginUser.getNickName());
+                gmUser.setDetailLimit(detailLimit);
+                gmUser.setGroupLimit(groupLimit);
+                gmUser.setMemberLimit(memberLimit);
                 gmUserService.login(gmUser);
             }
             result.put("code", "0000");

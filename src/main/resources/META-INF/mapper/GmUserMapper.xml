@@ -6,12 +6,16 @@
     <result column="openid" property="openid" jdbcType="VARCHAR" />
     <result column="session_key" property="sessionKey" jdbcType="VARCHAR" />
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="group_num" property="groupNum" jdbcType="INTEGER" />
+    <result column="group_limit" property="groupLimit" jdbcType="INTEGER" />
+    <result column="member_limit" property="memberLimit" jdbcType="INTEGER" />
+    <result column="detail_limit" property="detailLimit" jdbcType="INTEGER" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, openid, session_key, nick_name, created_date, modified_date
+    id, openid, session_key, nick_name,group_num,group_limit,member_limit,detail_limit, created_date, modified_date
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -23,10 +27,11 @@
 
   <insert id="insert" parameterType="dzq.group.mark.entity.GmUser" >
     insert into gm_user (openid, session_key,
-      nick_name,
+      nick_name,group_num,group_limit,member_limit,detail_limit,
       created_date, modified_date)
     values (#{openid,jdbcType=VARCHAR}, #{sessionKey,jdbcType=VARCHAR},
-      #{nickName,jdbcType=VARCHAR},
+      #{nickName,jdbcType=VARCHAR},#{groupNum,jdbcType=INTEGER},
+      #{groupLimit,jdbcType=INTEGER},#{memberLimit,jdbcType=INTEGER},#{detailLimit,jdbcType=INTEGER},
       now(), now())
   </insert>
   <select id="getUserByOpenid" resultMap="BaseResultMap">
@@ -34,4 +39,8 @@
     <include refid="Base_Column_List" />
     from gm_user where openid = #{openid,jdbcType=VARCHAR}
   </select>
+  <update id="addGroupNum" parameterType="dzq.group.mark.entity.GmUser">
+    update gm_user set group_num = group_num + 1 where id = #{id,jdbcType=BIGINT}
+    and group_num = #{groupNum,jdbcType=INTEGER}
+  </update>
 </mapper>

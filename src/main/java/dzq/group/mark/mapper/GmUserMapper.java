@@ -10,4 +10,6 @@ public interface GmUserMapper {
     GmUser getUserByOpenid(String openid);
 
     void updateAccessDate(GmUser gmUser);
+
+    int addGroupNum(GmUser gmUser);
 }
