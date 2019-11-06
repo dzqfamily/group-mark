@@ -139,11 +139,19 @@ public class GmGroupService {
 
     public void modifyGroupName(ModifyGroupNameRequest modifyGroupNameRequest) {
 
-        GmGroup gmGroup = new GmGroup();
-        gmGroup.setId(modifyGroupNameRequest.getGroupId());
+        GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(modifyGroupNameRequest.getGroupId());
+
+        if (gmGroup == null) {
+            throw new GroupMarkException(ValidExCode.NOT_FOUND_GROUP.getCode());
+        }
+
         gmGroup.setGroupName(modifyGroupNameRequest.getGroupName());
 
-        gmGroupMapper.modifyGroupName(gmGroup);
+        int count = gmGroupMapper.modifyGroupName(gmGroup);
+
+        if (count == 0) {
+            throw new GroupMarkException(ValidExCode.MODIFY_FREQUENT.getCode());
+        }
 
     }
 
@@ -165,6 +173,19 @@ public class GmGroupService {
     }
 
     public void deleteGroup(DeleteGroupRequest deleteGroupRequest) {
+
+        GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(deleteGroupRequest.getGroupId());
+
+        if (gmGroup == null) {
+            throw new GroupMarkException(ValidExCode.NOT_FOUND_GROUP.getCode());
+        }
+
+        GmUser gmUser = gmUserService.getUserByToken(deleteGroupRequest.getToken());
+
+        if (!gmUser.getOpenid().equals(gmGroup.getOpenid())) {
+            throw new GroupMarkException(ValidExCode.DELETE_GROUP_NOT_SELF.getCode());
+        }
+
         gmGroupMapper.deleteGroup(deleteGroupRequest.getGroupId());
     }
 

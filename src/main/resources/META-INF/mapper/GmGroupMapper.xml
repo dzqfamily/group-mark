@@ -7,12 +7,13 @@
     <result column="group_name" property="groupName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="member_num" property="memberNum" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="BIGINT" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, openid, group_name, status,member_num,created_date, modified_date
+    id, openid, group_name, status,member_num,version,created_date, modified_date
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -23,22 +24,24 @@
   </select>
 
   <insert id="insert" parameterType="dzq.group.mark.entity.GmGroup" useGeneratedKeys="true" keyProperty="id">
-    insert into gm_group (openid, group_name,status,member_num,
+    insert into gm_group (openid, group_name,status,member_num,version,
       created_date, modified_date)
     values (#{openid,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},'0',
-      #{memberNum,jdbcType=INTEGER},
+      #{memberNum,jdbcType=INTEGER},#{version,jdbcType=BIGINT},
       now(), now())
   </insert>
   <select id="selectMyGroup" resultMap="BaseResultMap">
     select
-    g.id, g.openid, g.group_name, g.status,g.member_num,g.created_date, g.modified_date
+    g.id, g.openid, g.group_name, g.status,g.member_num,g.version,g.created_date, g.modified_date
     from gm_group g left join gm_group_member gm on g.id = gm.group_id
     where (gm.openid = #{openid,jdbcType=VARCHAR} and g.status = '0' and gm.status = '0') or (g.openid = #{openid,jdbcType=VARCHAR} and g.status = '0')
-    group by g.id, g.openid, g.group_name, g.status,g.member_num,g.created_date, g.modified_date
+    group by g.id, g.openid, g.group_name, g.status,g.member_num,g.version,g.created_date, g.modified_date
     order by g.created_date asc
   </select>
   <update id="modifyGroupName" parameterType="dzq.group.mark.entity.GmGroup">
-    update gm_group set group_name = #{groupName,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+    update gm_group set group_name = #{groupName,jdbcType=VARCHAR},
+    version = version + 1
+    where id = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
   </update>
   <delete id="deleteGroup">
     update gm_group set status = '1' where id = #{id,jdbcType=BIGINT}

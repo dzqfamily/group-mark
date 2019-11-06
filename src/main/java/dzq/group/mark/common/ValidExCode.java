@@ -12,6 +12,11 @@ public enum ValidExCode {
     MEMBER_LIMIT_ERROR("0009", "团员超过上限"),
     CREATE_MEMBER_FREQUENT("0010", "创建团员频繁"),
     DOSET_NO_UNDETAILI("0011", "没有需要结算的明细"),
+    MODIFY_DETAIL_NOT_SELF("0012", "只有创建人才能修改明细"),
+    DELETE_DETAIL_NOT_SELF("0013", "只有创建人才能删除明细"),
+    MODIFY_FREQUENT("0014", "修改操作冲突,请重试"),
+    DELETE_GROUP_NOT_SELF("0015", "只有创建人才能删除团"),
+    NOT_FOUND_GROUP("0016", "未找到团"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");

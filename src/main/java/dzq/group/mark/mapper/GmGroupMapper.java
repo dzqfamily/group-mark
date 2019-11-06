@@ -14,7 +14,7 @@ public interface GmGroupMapper {
 
     List<GmGroup> selectMyGroup(String openid);
 
-    void modifyGroupName(GmGroup gmGroup);
+    int modifyGroupName(GmGroup gmGroup);
 
     void deleteGroup(Long id);
 

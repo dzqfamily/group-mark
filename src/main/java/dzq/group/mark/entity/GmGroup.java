@@ -13,6 +13,8 @@ public class GmGroup {
 
     private int memberNum;
 
+    private long version;
+
     private Date createdDate;
 
     private Date modifiedDate;
@@ -71,5 +73,13 @@ public class GmGroup {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

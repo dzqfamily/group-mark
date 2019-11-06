@@ -15,7 +15,7 @@ public interface GmDetailMapper {
 
     List<GmDetail> selectDetailByGroupId(long groupId);
 
-    void updateDetail(GmDetail gmDetail);
+    int updateDetail(GmDetail gmDetail);
 
     void deleteDetail(long id);
 

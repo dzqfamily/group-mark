@@ -22,6 +22,8 @@ public class GmDetail {
 
     private String status;
 
+    private long version;
+
     private Date createdDate;
 
     private Date modifiedDate;
@@ -112,5 +114,13 @@ public class GmDetail {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

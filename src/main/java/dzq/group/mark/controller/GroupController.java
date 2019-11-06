@@ -180,6 +180,10 @@ public class GroupController {
 
             gmGroupService.modifyGroupName(modifyGroupNameRequest);
 
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());

@@ -31,8 +31,6 @@ public class GmDetailService {
     private GmDetailMoneyMapper gmDetailMoneyMapper;
     @Autowired
     private GmGroupMemberMapper gmGroupMemberMapper;
-    @Autowired
-    private GmGroupMapper gmGroupMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void create(DetailRequest detailRequest) {
@@ -114,7 +112,11 @@ public class GmDetailService {
 
         parseDetail(gmDetail, detailRequest);
 
-        gmDetailMapper.updateDetail(gmDetail);
+        int count = gmDetailMapper.updateDetail(gmDetail);
+
+        if (count == 0) {
+            throw new GroupMarkException(ValidExCode.MODIFY_FREQUENT.getCode());
+        }
 
         gmDetailMoneyMapper.deleteByDetailId(gmDetail.getId());
 
@@ -182,6 +184,13 @@ public class GmDetailService {
     }
 
     public void deleteDetail(DeleteDetailRequest deleteDetailRequest) {
+        GmDetail gmDetail = gmDetailMapper.selectByPrimaryKey(deleteDetailRequest.getDetailId());
+
+        GmUser gmUser = gmUserService.getUserByToken(deleteDetailRequest.getToken());
+        if (!gmUser.getOpenid().equals(gmDetail.getOpenid())) {
+            throw new GroupMarkException(ValidExCode.DELETE_DETAIL_NOT_SELF.getCode());
+        }
+
         gmDetailMapper.deleteDetail(deleteDetailRequest.getDetailId());
     }
 }
