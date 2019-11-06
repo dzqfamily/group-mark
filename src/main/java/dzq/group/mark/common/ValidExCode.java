@@ -17,6 +17,7 @@ public enum ValidExCode {
     MODIFY_FREQUENT("0014", "修改操作冲突,请重试"),
     DELETE_GROUP_NOT_SELF("0015", "只有创建人才能删除团"),
     NOT_FOUND_GROUP("0016", "未找到团"),
+    NOT_FOUND_DETAIL("0017", "未找到明细"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");

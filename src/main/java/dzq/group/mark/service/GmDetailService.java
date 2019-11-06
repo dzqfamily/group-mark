@@ -137,6 +137,9 @@ public class GmDetailService {
     public String selectDetailInfo(DetailInfoRequest detailInfoRequest) {
 
         GmDetail gmDetail = gmDetailMapper.selectByPrimaryKey(detailInfoRequest.getDetailId());
+        if (gmDetail == null) {
+            throw new GroupMarkException(ValidExCode.NOT_FOUND_DETAIL.getCode());
+        }
         DetailInfoResponse detailInfoResponse = createDetailInfoResponse(gmDetail);
 
         return JSON.toJSONString(detailInfoResponse);
@@ -185,6 +188,10 @@ public class GmDetailService {
 
     public void deleteDetail(DeleteDetailRequest deleteDetailRequest) {
         GmDetail gmDetail = gmDetailMapper.selectByPrimaryKey(deleteDetailRequest.getDetailId());
+
+        if (gmDetail == null) {
+            throw new GroupMarkException(ValidExCode.NOT_FOUND_DETAIL.getCode());
+        }
 
         GmUser gmUser = gmUserService.getUserByToken(deleteDetailRequest.getToken());
         if (!gmUser.getOpenid().equals(gmDetail.getOpenid())) {
