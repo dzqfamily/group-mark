@@ -69,7 +69,7 @@ public class DetailController {
 
     @RequestMapping(value = "/detailList", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
-    public String create(DetailListRequest detailListRequest) {
+    public String detailList(DetailListRequest detailListRequest) {
 
         logger.info(detailListRequest);
 

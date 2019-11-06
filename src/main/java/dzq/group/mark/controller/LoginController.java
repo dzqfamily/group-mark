@@ -2,24 +2,18 @@ package dzq.group.mark.controller;
 
 import com.alibaba.fastjson.JSON;
 import dzq.group.mark.domain.LoginUser;
-import dzq.group.mark.domain.UserInfoRequest;
 import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.service.GmUserService;
 import dzq.group.mark.utils.HttpClientUtil;
-import dzq.group.mark.utils.MD5Encrypt;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 

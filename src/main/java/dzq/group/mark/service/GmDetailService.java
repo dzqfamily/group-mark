@@ -35,6 +35,8 @@ public class GmDetailService {
     @Transactional(rollbackFor = Exception.class)
     public void create(DetailRequest detailRequest) {
 
+
+
         GmDetail gmDetail = createDetail(detailRequest);
         gmDetailMapper.insert(gmDetail);
 

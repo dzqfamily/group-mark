@@ -11,9 +11,29 @@ public class GmGroup {
 
     private String status;
 
+    private int memberNum;
+
+    private int detailNum;
+
     private Date createdDate;
 
     private Date modifiedDate;
+
+    public int getMemberNum() {
+        return memberNum;
+    }
+
+    public void setMemberNum(int memberNum) {
+        this.memberNum = memberNum;
+    }
+
+    public int getDetailNum() {
+        return detailNum;
+    }
+
+    public void setDetailNum(int detailNum) {
+        this.detailNum = detailNum;
+    }
 
     public Long getId() {
         return id;

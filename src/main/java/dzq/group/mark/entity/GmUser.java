@@ -13,11 +13,21 @@ public class GmUser {
 
     private String nickName;
 
+    private int groupNum;
+
     private Date accessDate;
 
     private Date createdDate;
 
     private Date modifiedDate;
+
+    public int getGroupNum() {
+        return groupNum;
+    }
+
+    public void setGroupNum(int groupNum) {
+        this.groupNum = groupNum;
+    }
 
     public Long getId() {
         return id;
