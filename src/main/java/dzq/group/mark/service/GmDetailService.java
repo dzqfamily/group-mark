@@ -10,6 +10,7 @@ import dzq.group.mark.mapper.GmDetailMapper;
 import dzq.group.mark.mapper.GmDetailMoneyMapper;
 import dzq.group.mark.mapper.GmGroupMapper;
 import dzq.group.mark.mapper.GmGroupMemberMapper;
+import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,7 @@ public class GmDetailService {
 
     private void checkDetailLimt(GmUser gmUser, DetailRequest detailRequest) {
 
-        String yyyyMM = new SimpleDateFormat("yyyyMM").format(new Date());
+        String yyyyMM = TimeUtil.format6(new Date());
 
 
 

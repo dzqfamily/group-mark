@@ -7,6 +7,7 @@ import dzq.group.mark.entity.*;
 import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.JJWTUtil;
+import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -237,11 +238,11 @@ public class GmGroupService {
                 .filter(memberSetResponse -> memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) != 0)
                 .peek(memberSetResponse -> {
                     if (memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) > 0) {
-                        memberSetResponse.setDirection("I");
-                        memberSetResponse.setDirName(DirectionCode.getMsgByCode("I"));
+                        memberSetResponse.setDirection(DirectionCode.REVENUES.getCode());
+                        memberSetResponse.setDirName(DirectionCode.REVENUES.getMsg());
                     } else {
-                        memberSetResponse.setDirection("D");
-                        memberSetResponse.setDirName(DirectionCode.getMsgByCode("D"));
+                        memberSetResponse.setDirection(DirectionCode.EXPENSES.getCode());
+                        memberSetResponse.setDirName(DirectionCode.EXPENSES.getMsg());
                     }
                 })
                 .sorted(Comparator.comparing(MemberSetResponse::getSetMoney).reversed()).collect(Collectors.toList()));
@@ -319,7 +320,7 @@ public class GmGroupService {
         settleResponse.setGroupId(settle.getGroupId());
         settleResponse.setNickName(gmUserService.getUserByOpenid(settle.getOpenid()).getNickName());
         settleResponse.setSetNum(settle.getSetNum());
-        settleResponse.setCreatedDateStr(new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(settle.getCreatedDate()));
+        settleResponse.setCreatedDateStr(TimeUtil.format17(settle.getCreatedDate()));
         settleResponse.setId(settle.getId());
         return settleResponse;
     }
