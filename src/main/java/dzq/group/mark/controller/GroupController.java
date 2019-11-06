@@ -5,6 +5,7 @@ import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.GmGroup;
 import dzq.group.mark.entity.GmGroupMember;
+import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.exception.ValidException;
 import dzq.group.mark.service.GmDetailService;
 import dzq.group.mark.service.GmGroupService;
@@ -50,6 +51,10 @@ public class GroupController {
 
             logger.info(createGroupRequest + "GroupController create success");
         } catch (ValidException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
+        } catch(GroupMarkException e){
             result.put("code", e.getCode());
             result.put("msg", e.getMsg());
             return JSON.toJSONString(result);
@@ -146,6 +151,10 @@ public class GroupController {
 
             gmGroupService.addGroupMember(addGroupMemberRequest);
 
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -278,6 +287,10 @@ public class GroupController {
         try {
             DoSetResponse doSetResponse = gmGroupService.doSet(doSetRequest);
             result.put("doSetResponse", doSetResponse);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -298,6 +311,10 @@ public class GroupController {
         Map<String, Object> result = new HashMap<>();
         try {
             gmGroupService.setDetail(setDetailRequest);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());

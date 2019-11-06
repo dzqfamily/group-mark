@@ -182,6 +182,10 @@ public class GmGroupService {
 
         List<GmDetail> unSetDetailList = gmDetailMapper.unSetDetailList(doSetRequest.getGroupId());
 
+        if (unSetDetailList.size() == 0) {
+            throw new GroupMarkException(ValidExCode.DOSET_NO_UNDETAILI.getCode());
+        }
+
         return accumulateResponse(unSetDetailList);
 
 

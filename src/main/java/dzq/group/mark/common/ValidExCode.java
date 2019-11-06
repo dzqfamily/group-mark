@@ -11,6 +11,7 @@ public enum ValidExCode {
     CREATE_GROUP_FREQUENT("0008", "创建团频繁"),
     MEMBER_LIMIT_ERROR("0009", "团员超过上限"),
     CREATE_MEMBER_FREQUENT("0010", "创建团员频繁"),
+    DOSET_NO_UNDETAILI("0011", "没有需要结算的明细"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");

@@ -5,6 +5,7 @@ import dzq.group.mark.common.DetailStatusCode;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.GmDetail;
+import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.exception.ValidException;
 import dzq.group.mark.service.GmDetailService;
 import dzq.group.mark.service.GmUserService;
@@ -53,6 +54,10 @@ public class DetailController {
             }
 
         } catch (ValidException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
+        } catch (GroupMarkException e) {
             result.put("code", e.getCode());
             result.put("msg", e.getMsg());
             return JSON.toJSONString(result);
