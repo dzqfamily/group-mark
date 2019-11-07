@@ -157,8 +157,12 @@ public class GmGroupService {
 
     }
 
-    public GmGroup selectGroupById(long groupId) {
-        return gmGroupMapper.selectByPrimaryKey(groupId);
+    public GmGroupView selectGroupById(GroupInfoRequest groupInfoRequest) {
+        GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(groupInfoRequest.getGroupId());
+        GmGroupView gmGroupView = new GmGroupView();
+        gmGroupView.setGroupName(gmGroup.getGroupName());
+        gmGroupView.setDeleteFlag(gmGroup.getOpenid().equals(JJWTUtil.parseJWT(groupInfoRequest.getToken())));
+        return gmGroupView;
     }
 
     public void modifyGroupMemberName(ModifyGroupMemberNameRequest modifyGroupMemberNameRequest) {

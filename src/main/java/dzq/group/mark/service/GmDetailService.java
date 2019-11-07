@@ -1,12 +1,14 @@
 package dzq.group.mark.service;
 
 import com.alibaba.fastjson.JSON;
+import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import dzq.group.mark.common.DetailStatusCode;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.*;
 import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.mapper.*;
+import dzq.group.mark.utils.JJWTUtil;
 import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -177,12 +179,12 @@ public class GmDetailService {
         if (gmDetail == null) {
             throw new GroupMarkException(ValidExCode.NOT_FOUND_DETAIL.getCode());
         }
-        DetailInfoResponse detailInfoResponse = createDetailInfoResponse(gmDetail);
+        DetailInfoResponse detailInfoResponse = createDetailInfoResponse(gmDetail,detailInfoRequest);
 
         return JSON.toJSONString(detailInfoResponse);
     }
 
-    private DetailInfoResponse createDetailInfoResponse(GmDetail gmDetail) {
+    private DetailInfoResponse createDetailInfoResponse(GmDetail gmDetail, DetailInfoRequest detailInfoRequest) {
 
         List<GmDetailMoney> detailMoneyList = gmDetailMoneyMapper.detailMoneyByDetailId(gmDetail.getId());
 
@@ -197,6 +199,10 @@ public class GmDetailService {
         detailInfoResponse.setProject(gmDetail.getProject());
         detailInfoResponse.setRemark(gmDetail.getRemark());
         detailInfoResponse.setMemberMoneyList(getMemberMoneyList(groupMemberList, detailMoneyList));
+        detailInfoResponse.setStatus(gmDetail.getStatus());
+        detailInfoResponse.setStatusName(DetailStatusCode.getMsgByCode(gmDetail.getStatus()));
+        detailInfoResponse.setModifyFlag(DetailStatusCode.INIT.getCode().equals(detailInfoResponse.getStatus()));
+        detailInfoResponse.setDeleteFlag(gmDetail.getOpenid().equals(JJWTUtil.parseJWT(detailInfoRequest.getToken())));
         return detailInfoResponse;
     }
 

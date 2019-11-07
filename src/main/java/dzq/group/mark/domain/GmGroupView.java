@@ -7,9 +7,9 @@ public class GmGroupView {
 
     private Long id;
 
-    private String openid;
-
     private String groupName;
+
+    private boolean deleteFlag;
 
     private Date createdDate;
 
@@ -25,12 +25,12 @@ public class GmGroupView {
         this.id = id;
     }
 
-    public String getOpenid() {
-        return openid;
+    public boolean isDeleteFlag() {
+        return deleteFlag;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public String getGroupName() {
@@ -64,4 +64,6 @@ public class GmGroupView {
     public void setUnSetMoney(String unSetMoney) {
         this.unSetMoney = unSetMoney;
     }
+
+
 }

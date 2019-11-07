@@ -210,8 +210,9 @@ public class GroupController {
             //是否是本团团员
             gmGroupService.checkSelfGroup(groupInfoRequest.getGroupId(), groupInfoRequest.getToken());
 
-            GmGroup gmGroup = gmGroupService.selectGroupById(groupInfoRequest.getGroupId());
-            result.put("gmGroup", gmGroup);
+            GmGroupView gmGroupView = gmGroupService.selectGroupById(groupInfoRequest);
+
+            result.put("gmGroup", gmGroupView);
         } catch (GroupMarkException e) {
             result.put("code", e.getCode());
             result.put("msg", e.getMsg());
