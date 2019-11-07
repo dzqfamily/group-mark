@@ -8,6 +8,7 @@ import dzq.group.mark.entity.GmDetail;
 import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.exception.ValidException;
 import dzq.group.mark.service.GmDetailService;
+import dzq.group.mark.service.GmGroupService;
 import dzq.group.mark.service.GmUserService;
 import dzq.group.mark.vaild.CreateDetailValid;
 import org.apache.log4j.Logger;
@@ -35,6 +36,8 @@ public class DetailController {
     private GmDetailService gmDetailService;
     @Autowired
     private GmUserService gmUserService;
+    @Autowired
+    private GmGroupService gmGroupService;
 
 
     @RequestMapping(value = "/create", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
@@ -47,6 +50,10 @@ public class DetailController {
         try {
 
             createDetailValid.vaild(detailRequest);
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(detailRequest.getGroupId(), detailRequest.getToken());
+
             if (detailRequest.getId() > 0) {
                 gmDetailService.update(detailRequest);
             }else{
@@ -81,6 +88,9 @@ public class DetailController {
         Map<String, Object> result = new HashMap<>();
         try {
 
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(detailListRequest.getGroupId(), detailListRequest.getToken());
+
             List<GmDetail> gmDetailList = gmDetailService.selectDetailByGroupId(detailListRequest.getGroupId());
 
             List<GmDetailView> gmDetailViewList = gmDetailList.stream().map(gmDetail -> {
@@ -95,6 +105,10 @@ public class DetailController {
 
             result.put("gmDetailViewList", gmDetailViewList);
 
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -115,9 +129,15 @@ public class DetailController {
 
         Map<String, Object> result = new HashMap<>();
         try {
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(detailInfoRequest.getGroupId(), detailInfoRequest.getToken());
 
             String detailInfo = gmDetailService.selectDetailInfo(detailInfoRequest);
             result.put("detailInfo", detailInfo);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());

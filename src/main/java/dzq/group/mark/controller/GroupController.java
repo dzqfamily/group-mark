@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -81,13 +81,12 @@ public class GroupController {
         try {
 
             List<GmGroup> groupList = gmGroupService.selectMyGroup(baseRequest);
-            List<GmGroupView> groupViewList = new ArrayList<>();
-            groupList.forEach(gmGroup -> {
+            List<GmGroupView> groupViewList = groupList.stream().map((gmGroup -> {
                 GmGroupView gmGroupView = new GmGroupView();
                 BeanUtils.copyProperties(gmGroup, gmGroupView);
                 gmGroupView.setUnSetMoney(gmDetailService.unSetMoney(gmGroup.getId()).stripTrailingZeros().toPlainString());
-                groupViewList.add(gmGroupView);
-            });
+                return gmGroupView;
+            })).collect(Collectors.toList());
             result.put("myGroupViewList", groupViewList);
             logger.info("GroupController myGroup size = " + groupList.size());
 
@@ -113,14 +112,9 @@ public class GroupController {
         Map<String, Object> result = new HashMap<>();
 
         try {
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(myGroupMemberRequest.getGroupId(), myGroupMemberRequest.getToken());
 
-            GmGroupMember gmGroupMemberSelf = gmGroupService.selectMyGroupMemberSelf(myGroupMemberRequest);
-            GmGroup gmGroup = gmGroupService.selectGroupMyCreate(myGroupMemberRequest);
-            if (gmGroupMemberSelf == null && gmGroup == null) {
-                result.put("code", ValidExCode.PARAM_ERROR.getCode());
-                result.put("msg",  ValidExCode.PARAM_ERROR.getMsg());
-                return JSON.toJSONString(result);
-            }
             List<GmGroupMemberView> groupMemberList = gmGroupService.selectMyGroupMember(myGroupMemberRequest);
 
             result.put("groupMemberList", groupMemberList);
@@ -148,6 +142,9 @@ public class GroupController {
         Map<String, Object> result = new HashMap<>();
 
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(addGroupMemberRequest.getGroupId(), addGroupMemberRequest.getToken());
 
             gmGroupService.addGroupMember(addGroupMemberRequest);
 
@@ -178,6 +175,9 @@ public class GroupController {
 
         try {
 
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(modifyGroupNameRequest.getGroupId(), modifyGroupNameRequest.getToken());
+
             gmGroupService.modifyGroupName(modifyGroupNameRequest);
 
         } catch (GroupMarkException e) {
@@ -207,8 +207,15 @@ public class GroupController {
 
         try {
 
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(groupInfoRequest.getGroupId(), groupInfoRequest.getToken());
+
             GmGroup gmGroup = gmGroupService.selectGroupById(groupInfoRequest.getGroupId());
             result.put("gmGroup", gmGroup);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -229,7 +236,15 @@ public class GroupController {
         logger.info(modifyGroupMemberNameRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(modifyGroupMemberNameRequest.getGroupId(), modifyGroupMemberNameRequest.getToken());
+
             gmGroupService.modifyGroupMemberName(modifyGroupMemberNameRequest);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -249,7 +264,14 @@ public class GroupController {
         logger.info(deleteMemberRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(deleteMemberRequest.getGroupId(), deleteMemberRequest.getToken());
+
             gmGroupService.deleteMember(deleteMemberRequest);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -289,6 +311,10 @@ public class GroupController {
         logger.info(doSetRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(doSetRequest.getGroupId(), doSetRequest.getToken());
+
             DoSetResponse doSetResponse = gmGroupService.doSet(doSetRequest);
             result.put("doSetResponse", doSetResponse);
         } catch (GroupMarkException e) {
@@ -314,6 +340,10 @@ public class GroupController {
         logger.info(setDetailRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(setDetailRequest.getGroupId(), setDetailRequest.getToken());
+
             gmGroupService.setDetail(setDetailRequest);
         } catch (GroupMarkException e) {
             result.put("code", e.getCode());
@@ -338,8 +368,16 @@ public class GroupController {
         logger.info(groupInfoRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(groupInfoRequest.getGroupId(), groupInfoRequest.getToken());
+
             List<SettleResponse> settleList = gmGroupService.settleList(groupInfoRequest);
             result.put("settleList", settleList);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());
@@ -359,8 +397,16 @@ public class GroupController {
         logger.info(settleInfoRequest);
         Map<String, Object> result = new HashMap<>();
         try {
+
+            //是否是本团团员
+            gmGroupService.checkSelfGroup(settleInfoRequest.getGroupId(), settleInfoRequest.getToken());
+
             SettleResponse settleResponse = gmGroupService.settleInfo(settleInfoRequest);
             result.put("settleResponse", settleResponse);
+        } catch (GroupMarkException e) {
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
         } catch (Exception e) {
             logger.info("GroupController create" + e);
             result.put("code", ValidExCode.ERROR.getCode());

@@ -20,7 +20,5 @@ public interface GmGroupMapper {
 
     List<GmGroup> selectMyCrtGroup(String openid);
 
-    GmGroup selectGroupMyCreate(@Param("id") long id,@Param("openid") String openid);
-
     int addMemberNum(@Param("memberNum") int memberNum,@Param("gmGroup") GmGroup gmGroup);
 }

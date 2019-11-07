@@ -2,7 +2,17 @@ package dzq.group.mark.domain;
 
 public class DeleteMemberRequest extends BaseRequest {
 
+    private long groupId;
+
     private long groupMemberId;
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
 
     public long getGroupMemberId() {
         return groupMemberId;

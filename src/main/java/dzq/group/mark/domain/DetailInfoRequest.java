@@ -8,6 +8,16 @@ import java.util.List;
 public class DetailInfoRequest extends BaseRequest {
     private long detailId;
 
+    private long groupId;
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
+
     public long getDetailId() {
         return detailId;
     }

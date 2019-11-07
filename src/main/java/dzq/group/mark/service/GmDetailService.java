@@ -226,8 +226,8 @@ public class GmDetailService {
     public void deleteDetail(DeleteDetailRequest deleteDetailRequest) {
         GmDetail gmDetail = gmDetailMapper.selectByPrimaryKey(deleteDetailRequest.getDetailId());
 
-        if (gmDetail == null) {
-            throw new GroupMarkException(ValidExCode.NOT_FOUND_DETAIL.getCode());
+        if (gmDetail == null || !DetailStatusCode.INIT.getCode().equals(gmDetail.getStatus())) {
+            throw new GroupMarkException(ValidExCode.DETAIL_MODIFY_ERROR.getCode());
         }
 
         GmUser gmUser = gmUserService.getUserByToken(deleteDetailRequest.getToken());

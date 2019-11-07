@@ -2,9 +2,19 @@ package dzq.group.mark.domain;
 
 public class ModifyGroupMemberNameRequest extends BaseRequest {
 
+    private long groupId;
+
     private long groupMemberId;
 
     private String groupMemberName;
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
 
     public long getGroupMemberId() {
         return groupMemberId;

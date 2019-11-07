@@ -1,7 +1,18 @@
 package dzq.group.mark.domain;
 
 public class SettleInfoRequest extends BaseRequest {
+
+    private long groupId;
+
     private long settleId;
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
 
     public long getSettleId() {
         return settleId;

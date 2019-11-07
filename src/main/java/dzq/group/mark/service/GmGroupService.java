@@ -9,6 +9,7 @@ import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.JJWTUtil;
 import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -100,12 +101,12 @@ public class GmGroupService {
         return gmGroupMapper.selectMyGroup(gmUser.getOpenid());
     }
 
-    public GmGroupMember selectMyGroupMemberSelf(MyGroupMemberRequest myGroupMemberRequest) {
-        GmUser gmUser = gmUserService.getUserByToken(myGroupMemberRequest.getToken());
+    public GmGroupMember checkSelfGroup(long groupId,String token) {
+        GmUser gmUser = gmUserService.getUserByToken(token);
         if (gmUser != null) {
-            return gmGroupMemberMapper.selectMemberByGroupIdSelf(gmUser.getOpenid(), myGroupMemberRequest.getGroupId());
+            return gmGroupMemberMapper.selectMemberByGroupIdSelf(gmUser.getOpenid(), groupId);
         }
-        return null;
+        throw new GroupMarkException(ValidExCode.NOT_AUTH_DETAIL.getCode());
     }
 
     public List<GmGroupMemberView> selectMyGroupMember(MyGroupMemberRequest myGroupMemberRequest) {
@@ -193,11 +194,6 @@ public class GmGroupService {
     public List<GmGroup> selectMyCrtGroup(BaseRequest baseRequest) {
         String openid = JJWTUtil.parseJWT(baseRequest.getToken());
         return gmGroupMapper.selectMyCrtGroup(openid);
-    }
-
-    public GmGroup selectGroupMyCreate(MyGroupMemberRequest myGroupMemberRequest) {
-        String openid = JJWTUtil.parseJWT(myGroupMemberRequest.getToken());
-        return gmGroupMapper.selectGroupMyCreate(myGroupMemberRequest.getGroupId(), openid);
     }
 
     public DoSetResponse doSet(DoSetRequest doSetRequest) {
