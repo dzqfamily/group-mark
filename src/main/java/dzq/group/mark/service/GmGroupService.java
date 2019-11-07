@@ -161,6 +161,9 @@ public class GmGroupService {
         GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(groupInfoRequest.getGroupId());
         GmGroupView gmGroupView = new GmGroupView();
         gmGroupView.setGroupName(gmGroup.getGroupName());
+        gmGroupView.setId(gmGroup.getId());
+        gmGroupView.setCreatedDate(gmGroup.getCreatedDate());
+        gmGroupView.setModifiedDate(gmGroup.getModifiedDate());
         gmGroupView.setDeleteFlag(gmGroup.getOpenid().equals(JJWTUtil.parseJWT(groupInfoRequest.getToken())));
         return gmGroupView;
     }
