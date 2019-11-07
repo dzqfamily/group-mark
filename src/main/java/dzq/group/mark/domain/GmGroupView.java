@@ -11,11 +11,21 @@ public class GmGroupView {
 
     private boolean deleteFlag;
 
+    private boolean setFlag;
+
     private Date createdDate;
 
     private Date modifiedDate;
 
     private String unSetMoney;
+
+    public boolean isSetFlag() {
+        return setFlag;
+    }
+
+    public void setSetFlag(boolean setFlag) {
+        this.setFlag = setFlag;
+    }
 
     public Long getId() {
         return id;

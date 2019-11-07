@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,9 @@ public class GroupController {
             List<GmGroupView> groupViewList = groupList.stream().map((gmGroup -> {
                 GmGroupView gmGroupView = new GmGroupView();
                 BeanUtils.copyProperties(gmGroup, gmGroupView);
-                gmGroupView.setUnSetMoney(gmDetailService.unSetMoney(gmGroup.getId()).stripTrailingZeros().toPlainString());
+                BigDecimal unSetMoney = gmDetailService.unSetMoney(gmGroup.getId());
+                gmGroupView.setUnSetMoney(unSetMoney.stripTrailingZeros().toPlainString());
+                gmGroupView.setSetFlag(unSetMoney.compareTo(new BigDecimal(0)) > 0);
                 return gmGroupView;
             })).collect(Collectors.toList());
             result.put("myGroupViewList", groupViewList);

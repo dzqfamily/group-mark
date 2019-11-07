@@ -1,7 +1,6 @@
 package dzq.group.mark.service;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import dzq.group.mark.common.DetailStatusCode;
 import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -202,7 +200,8 @@ public class GmDetailService {
         detailInfoResponse.setStatus(gmDetail.getStatus());
         detailInfoResponse.setStatusName(DetailStatusCode.getMsgByCode(gmDetail.getStatus()));
         detailInfoResponse.setModifyFlag(DetailStatusCode.INIT.getCode().equals(detailInfoResponse.getStatus()));
-        detailInfoResponse.setDeleteFlag(gmDetail.getOpenid().equals(JJWTUtil.parseJWT(detailInfoRequest.getToken())));
+        detailInfoResponse.setDeleteFlag(DetailStatusCode.INIT.getCode().equals(detailInfoResponse.getStatus())
+                && gmDetail.getOpenid().equals(JJWTUtil.parseJWT(detailInfoRequest.getToken())));
         return detailInfoResponse;
     }
 

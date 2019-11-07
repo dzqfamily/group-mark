@@ -238,9 +238,8 @@ public class GmGroupService {
         doSetResponse.setSetMoney(setMoney);
         doSetResponse.setSetNum(setNum);
         doSetResponse.setSetResponseList(setResponseList.values().stream()
-                .filter(memberSetResponse -> memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) != 0)
                 .peek(memberSetResponse -> {
-                    if (memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) > 0) {
+                    if (memberSetResponse.getSetMoney().compareTo(new BigDecimal(0)) >= 0) {
                         memberSetResponse.setDirection(DirectionCode.REVENUES.getCode());
                         memberSetResponse.setDirName(DirectionCode.REVENUES.getMsg());
                     } else {
