@@ -6,12 +6,10 @@ import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.*;
 import dzq.group.mark.entity.*;
 import dzq.group.mark.exception.GroupMarkException;
-import dzq.group.mark.mapper.GmDetailMapper;
-import dzq.group.mark.mapper.GmDetailMoneyMapper;
-import dzq.group.mark.mapper.GmGroupMapper;
-import dzq.group.mark.mapper.GmGroupMemberMapper;
+import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +29,18 @@ public class GmDetailService {
     @Autowired
     private GmDetailMoneyMapper gmDetailMoneyMapper;
     @Autowired
+    private GmGroupMapper gmGroupMapper;
+    @Autowired
     private GmGroupMemberMapper gmGroupMemberMapper;
+    @Autowired
+    private GmDetailMonthlyMapper gmDetailMonthlyMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void create(DetailRequest detailRequest) {
 
         GmUser gmUser = gmUserService.getUserByToken(detailRequest.getToken());
 
-        checkDetailLimt(gmUser, detailRequest);
+        checkDetailLimt(detailRequest);
 
         GmDetail gmDetail = createDetail(detailRequest, gmUser);
         gmDetailMapper.insert(gmDetail);
@@ -50,12 +52,46 @@ public class GmDetailService {
 
     }
 
-    private void checkDetailLimt(GmUser gmUser, DetailRequest detailRequest) {
+    private void checkDetailLimt(DetailRequest detailRequest) {
+        GmGroup gmGroup = gmGroupMapper.selectByPrimaryKey(detailRequest.getGroupId());
+        if (gmGroup == null) {
+            throw new GroupMarkException(ValidExCode.NOT_FOUND_GROUP.getCode());
+        }
+        GmUser gmUser = gmUserService.getUserByOpenid(gmGroup.getOpenid());
 
+        addDetailNum(gmGroup,gmUser);
+
+
+    }
+
+    private void addDetailNum(GmGroup gmGroup, GmUser gmUser) {
+
+        GmDetailMonthly detailMonthly = getCurDetailMonthly(gmGroup);
+        if (detailMonthly.getDetailNum() + 1 > gmUser.getDetailLimit()) {
+            throw new GroupMarkException(ValidExCode.DETAIL_LIMIT_ERROR.getCode(), gmUser.getDetailLimit());
+        }
+        int count = gmDetailMonthlyMapper.addDetailNum(detailMonthly);
+        if (count == 0) {//创建冲突
+            addDetailNum(gmGroup, gmUser);
+        }
+    }
+
+    //跨月可能还会再次查询
+    private GmDetailMonthly getCurDetailMonthly(GmGroup gmGroup) {
         String yyyyMM = TimeUtil.format6(new Date());
-
-
-
+        GmDetailMonthly detailMonthly = gmDetailMonthlyMapper.selectByMonthly(gmGroup.getId(), yyyyMM);
+        if (detailMonthly == null) {
+            detailMonthly = new GmDetailMonthly();
+            detailMonthly.setDetailNum(0);
+            detailMonthly.setGroupId(gmGroup.getId());
+            detailMonthly.setMonthly(yyyyMM);
+            try {
+                gmDetailMonthlyMapper.insert(detailMonthly);
+            } catch (DuplicateKeyException e) {
+                return getCurDetailMonthly(gmGroup);
+            }
+        }
+        return detailMonthly;
     }
 
     private List<GmDetailMoney> createDetailMoneyList(GmDetail gmDetail, DetailRequest createDetailRequest) {

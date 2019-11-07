@@ -3,7 +3,6 @@
 <mapper namespace="dzq.group.mark.mapper.GmDetailMonthlyMapper" >
   <resultMap id="BaseResultMap" type="dzq.group.mark.entity.GmDetailMonthly" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="openid" property="openid" jdbcType="VARCHAR" />
     <result column="group_id" property="groupId" jdbcType="BIGINT" />
     <result column="monthly" property="monthly" jdbcType="VARCHAR" />
     <result column="detail_num" property="detailNum" jdbcType="INTEGER" />
@@ -12,7 +11,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, openid, group_id, monthly, detail_num, created_date, modified_date
+    id, group_id, monthly, detail_num, created_date, modified_date
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -23,12 +22,22 @@
   </select>
 
   <insert id="insert" parameterType="dzq.group.mark.entity.GmDetailMonthly" >
-    insert into gm_detail_monthly (id, openid, group_id, 
+    insert into gm_detail_monthly (group_id,
       monthly, detail_num, created_date, 
       modified_date)
-    values (#{id,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, 
-      #{monthly,jdbcType=VARCHAR}, #{detailNum,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, 
-      #{modifiedDate,jdbcType=TIMESTAMP})
+    values (#{groupId,jdbcType=BIGINT},
+      #{monthly,jdbcType=VARCHAR}, #{detailNum,jdbcType=INTEGER}, now(),
+      now())
   </insert>
-
+  <select id="selectByMonthly" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gm_detail_monthly
+    where group_id = #{groupId,jdbcType=BIGINT} and monthly = #{monthly,jdbcType=VARCHAR}
+  </select>
+  <update id="addDetailNum" parameterType="dzq.group.mark.entity.GmDetailMonthly">
+    update gm_detail_monthly set detail_num = detail_num + 1
+    where group_id = #{groupId,jdbcType=BIGINT} and monthly = #{monthly,jdbcType=VARCHAR}
+    and detail_num = #{detailNum,jdbcType=INTEGER}
+  </update>
 </mapper>

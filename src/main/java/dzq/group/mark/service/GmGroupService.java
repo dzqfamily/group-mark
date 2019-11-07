@@ -9,13 +9,11 @@ import dzq.group.mark.mapper.*;
 import dzq.group.mark.utils.JJWTUtil;
 import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,12 +72,13 @@ public class GmGroupService {
     private void checkMemberLimit(GmUser gmUser, GmGroup gmGroup, int memberNum) {
 
         if (gmGroup.getMemberNum() + memberNum > gmUser.getMemberLimit()) {
-            throw new GroupMarkException(ValidExCode.MEMBER_LIMIT_ERROR.getCode());
+            throw new GroupMarkException(ValidExCode.MEMBER_LIMIT_ERROR.getCode(),gmUser.getMemberLimit());
         }
 
         int count = gmGroupMapper.addMemberNum(memberNum, gmGroup);
         if (count == 0) {
-            throw new GroupMarkException(ValidExCode.CREATE_MEMBER_FREQUENT.getCode());
+            gmGroup = gmGroupMapper.selectByPrimaryKey(gmGroup.getId());
+            checkMemberLimit(gmUser, gmGroup, memberNum);
         }
 
     }
@@ -87,11 +86,12 @@ public class GmGroupService {
     private void checkGroupLimit(GmUser gmUser) {
 
         if (gmUser.getGroupLimit() + 1 > gmUser.getGroupLimit()) {
-            throw new GroupMarkException(ValidExCode.GROUP_LIMIT_ERROR.getCode());
+            throw new GroupMarkException(ValidExCode.GROUP_LIMIT_ERROR.getCode(), gmUser.getGroupLimit());
         }
         int count = gmUserService.addGroupNum(gmUser);
         if (count == 0) {
-            throw new GroupMarkException(ValidExCode.CREATE_GROUP_FREQUENT.getCode());
+            gmUser = gmUserService.getUserByOpenid(gmUser.getOpenid());
+            checkGroupLimit(gmUser);
         }
     }
 

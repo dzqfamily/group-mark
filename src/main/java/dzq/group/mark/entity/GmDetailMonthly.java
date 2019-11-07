@@ -5,8 +5,6 @@ import java.util.Date;
 public class GmDetailMonthly {
     private long id;
 
-    private String openid;
-
     private long groupId;
 
     private String monthly;
@@ -24,15 +22,6 @@ public class GmDetailMonthly {
     public void setId(long id) {
         this.id = id;
     }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
 
 
     public String getMonthly() {
