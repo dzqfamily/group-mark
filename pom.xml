@@ -203,5 +203,11 @@
 				<profile.dir>${profiles.dir}/dev</profile.dir>
 			</properties>
 		</profile>
+		<profile>
+			<id>product</id>
+			<properties>
+				<profile.dir>${profiles.dir}/product</profile.dir>
+			</properties>
+		</profile>
 	</profiles>
 </project>
