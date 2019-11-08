@@ -3,14 +3,10 @@
 
 ### 配置文件
     小程序配置文件miniprogram.properties
-    ···
     appid=
     appSecret=
-    ···
     JJWT加密配置password.properties
-    ···
     signingKey=
-    ···
 ### todo list
 1. request校验
 2. ~~创建团，团员，明细增加上限~~ 
