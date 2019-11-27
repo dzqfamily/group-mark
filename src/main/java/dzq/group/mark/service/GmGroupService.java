@@ -86,7 +86,7 @@ public class GmGroupService {
 
     private void checkGroupLimit(GmUser gmUser) {
 
-        if (gmUser.getGroupLimit() + 1 > gmUser.getGroupLimit()) {
+        if (gmUser.getGroupNum() + 1 > gmUser.getGroupLimit()) {
             throw new GroupMarkException(ValidExCode.GROUP_LIMIT_ERROR.getCode(), gmUser.getGroupLimit());
         }
         int count = gmUserService.addGroupNum(gmUser);
