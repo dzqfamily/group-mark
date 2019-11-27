@@ -1,8 +1,11 @@
 package dzq.group.mark.controller;
 
 import com.alibaba.fastjson.JSON;
+import dzq.group.mark.common.ValidExCode;
 import dzq.group.mark.domain.LoginUser;
+import dzq.group.mark.domain.SynUserRequest;
 import dzq.group.mark.entity.GmUser;
+import dzq.group.mark.exception.GroupMarkException;
 import dzq.group.mark.service.GmUserService;
 import dzq.group.mark.utils.HttpClientUtil;
 import org.apache.log4j.Logger;
@@ -69,6 +72,32 @@ public class LoginController {
         } else {
             result.put("code", "0001");
         }
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/sycUserInfo", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public String sycUserInfo(SynUserRequest synUserRequest) {
+        logger.info("LoginController sycUserInfo:" + synUserRequest);
+        Map<String, String> result = new HashMap<>();
+
+        try {
+
+            gmUserService.sycUserInfo(synUserRequest);
+
+            logger.info(synUserRequest + "sycUserInfo success");
+        } catch(GroupMarkException e){
+            result.put("code", e.getCode());
+            result.put("msg", e.getMsg());
+            return JSON.toJSONString(result);
+        } catch (Exception e) {
+            logger.info("LoginController sycUserInfo" + e);
+            result.put("code", ValidExCode.ERROR.getCode());
+            result.put("msg",  ValidExCode.ERROR.getMsg());
+            return JSON.toJSONString(result);
+        }
+        result.put("code", ValidExCode.SUCCESS.getCode());
+        result.put("msg",  ValidExCode.SUCCESS.getMsg());
         return JSON.toJSONString(result);
     }
 

@@ -43,4 +43,8 @@
     update gm_user set group_num = group_num + 1 where id = #{id,jdbcType=BIGINT}
     and group_num = #{groupNum,jdbcType=INTEGER}
   </update>
+  <update id="sycUserInfo" parameterType="dzq.group.mark.entity.GmUser">
+    update gm_user set nick_name = #{nickName,jdbcType=VARCHAR}
+    where openid = #{openid,jdbcType=VARCHAR}
+  </update>
 </mapper>

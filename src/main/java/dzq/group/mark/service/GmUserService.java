@@ -1,5 +1,6 @@
 package dzq.group.mark.service;
 
+import dzq.group.mark.domain.SynUserRequest;
 import dzq.group.mark.entity.GmUser;
 import dzq.group.mark.mapper.GmUserMapper;
 import dzq.group.mark.utils.JJWTUtil;
@@ -33,4 +34,11 @@ public class GmUserService {
         return gmUserMapper.addGroupNum(gmUser);
     }
 
+    public void sycUserInfo(SynUserRequest synUserRequest) {
+        String openid = JJWTUtil.parseJWT(synUserRequest.getToken());
+        GmUser gmUser = new GmUser();
+        gmUser.setNickName(synUserRequest.getNickName());
+        gmUser.setOpenid(openid);
+        gmUserMapper.sycUserInfo(gmUser);
+    }
 }

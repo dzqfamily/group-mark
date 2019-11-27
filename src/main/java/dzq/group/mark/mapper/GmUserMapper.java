@@ -12,4 +12,6 @@ public interface GmUserMapper {
     void updateAccessDate(GmUser gmUser);
 
     int addGroupNum(GmUser gmUser);
+
+    void sycUserInfo(GmUser gmUser);
 }
