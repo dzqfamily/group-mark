@@ -10,6 +10,7 @@ import dzq.group.mark.utils.JJWTUtil;
 import dzq.group.mark.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -46,8 +47,11 @@ public class GmGroupService {
         GmGroup gmGroup = new GmGroup();
         gmGroup.setGroupName(createGroupRequest.getGroupName());
         gmGroup.setOpenid(gmUser.getOpenid());
-
-        gmGroupMapper.insert(gmGroup);
+        try {
+            gmGroupMapper.insert(gmGroup);
+        } catch (DuplicateKeyException e) {
+            throw new GroupMarkException(ValidExCode.GROUP_EXIST.getCode());
+        }
         //创建自己
         List<GmGroupMember> gmGroupMemberList = new ArrayList<>();
         GmGroupMember ggm = new GmGroupMember();
@@ -148,8 +152,12 @@ public class GmGroupService {
         }
 
         gmGroup.setGroupName(modifyGroupNameRequest.getGroupName());
-
-        int count = gmGroupMapper.modifyGroupName(gmGroup);
+        int count;
+        try {
+            count = gmGroupMapper.modifyGroupName(gmGroup);
+        } catch (DuplicateKeyException e) {
+            throw new GroupMarkException(ValidExCode.GROUP_EXIST.getCode());
+        }
 
         if (count == 0) {
             throw new GroupMarkException(ValidExCode.MODIFY_FREQUENT.getCode());

@@ -21,6 +21,7 @@ public enum ValidExCode {
     NOT_FOUND_GROUP("0016", "未找到团"),
     NOT_FOUND_DETAIL("0017", "未找到明细"),
     NOT_AUTH_DETAIL("0018", "没有权限"),
+    GROUP_EXIST("0020", "团名重复"),
     SUCCESS("0000", "成功"),
     ERROR("9999", "服务器异常"),
     NOT_LOGIN("NOT_LOGIN", "未登陆");
